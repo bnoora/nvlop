@@ -54,7 +54,7 @@ async function getMessagesByChannel(channel_id) {
 // Get private messages from the database by users
 async function getPrivateMessages(user_id_1, user_id_2) {
     const client = await pool.connect();
-    const query = 'SELECT * FROM messages WHERE (user_id1 = $1 AND user_id2 = $2) OR (user_id1 = $2 AND user_id2 = $1)';
+    const query = 'SELECT * FROM private_messages WHERE (user_id1 = $1 AND user_id2 = $2) OR (user_id1 = $2 AND user_id2 = $1)';
     const values = [user_id_1, user_id_2];
     try {
         const res = await client.query(query, values);
