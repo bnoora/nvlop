@@ -1,11 +1,10 @@
 const pool = require('./dbConfig');
 
 // Create a channel in the database
-async function createChannel(channel_obj) {
+async function createChannel(owner_id, channel_name, description ) {
     const client = await pool.connect();
-    const { channel_name, description } = channel_obj;
-    const query = 'INSERT INTO channels (channel_name, description) VALUES ($1, $2) RETURNING *';
-    const values = [channel_name, description];
+    const query = 'INSERT INTO channels (owner_id, channel_name, description) VALUES ($1, $2) RETURNING *';
+    const values = [owner_id, channel_name, description];
     try {
         const res = await client.query(query, values);
         return res.rows[0];
@@ -99,4 +98,54 @@ async function removeUserFromChannel(channel_id, user_id) {
     }
 }
 
-module.exports = {createChannel, deleteChannel, getChannelById, getChannelsByUser, addUserToChannel, removeUserFromChannel};
+// Make a user a moderator of a channel
+async function addUserModerator(channel_id, user_id) {
+    const client = await pool.connect();
+    const query = 'UPDATE channel_membership SET is_mod = true WHERE channel_id = $1 AND user_id = $2';
+    const values = [channel_id, user_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error making user a moderator', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+// Remove a user as a moderator of a channel
+async function removeUserModerator(channel_id, user_id) {
+    const client = await pool.connect();
+    const query = 'UPDATE channel_membership SET is_mod = false WHERE channel_id = $1 AND user_id = $2';
+    const values = [channel_id, user_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error removing user as moderator', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+// Change the owner of a channel
+async function changeChannelOwner(channel_id, user_id) {
+    const client = await pool.connect();
+    const query = 'UPDATE channels SET owner_id = $1 WHERE channel_id = $2';
+    const values = [user_id, channel_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error changing channel owner', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = {createChannel, deleteChannel, getChannelById, 
+    getChannelsByUser, addUserToChannel, removeUserFromChannel,
+    addUserModerator, removeUserModerator, changeChannelOwner};
