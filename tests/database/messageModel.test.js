@@ -1,8 +1,6 @@
 const {createMessage, getMessagesByChannel, deleteMessage} = require('../../database/messageModel'); 
 const pool = require('../../database/dbConfig');
 
-const client = pool.connect();
-
 describe('Message Model', () => {
     it('should create a message in the database', async () => {
         const message = {
