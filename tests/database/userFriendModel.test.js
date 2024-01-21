@@ -1,8 +1,6 @@
 const {getFriends, createFriend, deleteFriend} = require('../../database/userFriendModel');
 const pool = require('../../database/dbConfig');
 
-const client = pool.connect();
-
 describe('User Friend Model', () => {
     it('should get all friends from the database by user_id', async () => {
         const res = await getFriends(1);
