@@ -12,7 +12,7 @@ CREATE TABLE users (
     one_time_token VARCHAR(100),
     token_created_at TIMESTAMP,
     one_time_token_created_at TIMESTAMP, 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE channels (
@@ -50,7 +50,7 @@ CREATE TABLE private_channels (
     channel_id SERIAL PRIMARY KEY,
     user_id1 INT REFERENCES users(user_id),
     user_id2 INT REFERENCES users(user_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE private_messages (
@@ -60,4 +60,3 @@ CREATE TABLE private_messages (
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
