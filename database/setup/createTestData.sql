@@ -3,7 +3,8 @@ INSERT INTO users (username, email, password, avatar_url, bio, github_url,
             twitter_url, website_url, token, one_time_token)
 VALUES
     ('johndoe', 'jd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url' , 'token', 'one_time_token'),
-    ('kanedoe', 'kd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url', 'token', 'one_time_token')
+    ('kanedoe', 'kd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url', 'token', 'one_time_token'),
+    ('danedoe', 'dd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url', 'token', 'one_time_token'),
 ;
 
 -- Create fake channels

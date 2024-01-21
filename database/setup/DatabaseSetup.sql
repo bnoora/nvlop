@@ -25,7 +25,7 @@ CREATE TABLE channels (
 
 CREATE TABLE channel_membership (
     user_id INT REFERENCES users(user_id),
-    channel_id INT REFERENCES channels(channel_id),
+    channel_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_mod BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (user_id, channel_id)
