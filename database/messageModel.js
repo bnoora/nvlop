@@ -19,7 +19,7 @@ async function createMessage(message_obj) {
 
 
 // Get 50 messages from the database by channel_id after a given message_id
-async function getMessagesByChannel(channel_id, message_id) {
+async function getMessagesByChannel(channel_id, message_id=0) {
     const client = await pool.connect();
     const query = 'SELECT * FROM messages WHERE channel_id = $1 AND message_id > $2 ORDER BY message_id ASC LIMIT 50'
     const values = [channel_id, message_id];
