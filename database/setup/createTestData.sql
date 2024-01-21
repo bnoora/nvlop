@@ -1,15 +1,17 @@
 -- Create fake users
-INSERT INTO users (username, email, password, avatar_url, bio, github_url, twitter_url, website_url)
+INSERT INTO users (username, email, password, avatar_url, bio, github_url, 
+            twitter_url, website_url, token, one_time_token)
 VALUES
-    ('johndoe', 'jd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url'),
-    ('kanedoe', 'kd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url')
+    ('johndoe', 'jd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url' , 'token', 'one_time_token'),
+    ('kanedoe', 'kd@gmail.com' , '123456', 'avatar_url', 'bio', 'github_url', 'twitter_url', 'website_url', 'token', 'one_time_token')
 ;
 
 -- Create fake channels
-INSERT INTO channels (channel_name, description)
+INSERT INTO channels (owner_id, channel_name, description)
 VALUES
-    ('general', 'General discussion'),
-    ('random', 'Random discussion')
+    (1, 'general', 'General discussion'),
+    (2, 'random', 'Random discussion'),
+
 ;
 
 -- Create fake channel memberships
@@ -37,6 +39,12 @@ INSERT INTO friends (user_id1, user_id2)
 VALUES
     (1, 2),
     (2, 1)
+;
+
+-- Create fake private channels
+INSERT INTO private_channels (user_id1, user_id2)
+VALUES
+    (1, 2),
 ;
 
 -- create fake private_messages
