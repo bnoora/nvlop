@@ -65,4 +65,30 @@ async function getUserByToken(token) {
     }
 }
 
-module.exports = {createUserToken, getUserToken, deleteUserToken};
+// Check token and expire time in the database, return true if token is valid
+async function checkTokenValid(token) {
+    const client = await pool.connect();
+    const query = 'SELECT * FROM user_token WHERE token = $1';
+    const values = [token];
+    const now = new Date();
+    try {
+        const res = await client.query(query, values);
+        if (res.rows[0]) {
+            const expire = new Date(res.rows[0].expires_at);
+            if (expire > now) {
+                return true;
+            } else {
+                return res.rows[0];
+            }
+        } else {
+            return false;
+        }
+    } catch (err) {
+        console.error('Error checking token', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = {createUserToken, getUserToken, deleteUserToken, getUserByToken, checkTokenValid};
