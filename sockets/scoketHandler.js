@@ -1,7 +1,6 @@
-const {getUserByToken, checkTokenValid} = require('../database/userTokenModel');
 const {createPrivateMessage, deletePrivateMessage} = require('../database/privateChatModel');
-const {getChannelById } = require('../database/channelModel');
 const {createMessage, deleteMessage} = require('../database/messageModel'); 
+const {checkAuth, roomFinder} = require('./socketHelper');
 
 
 const socketHandler = (io) => {
@@ -81,25 +80,5 @@ const socketHandler = (io) => {
         });
     });
 };
-
-async function checkAuth(token) {
-    const validity = await checkTokenValid(token);
-    if (validity === true) {
-        const user = await getUserByToken(token);
-        return user || false;
-    } else {
-        return false;
-    }
-}
-
-function roomFinder(roomId, roomType) {
-    let room = null;
-    if (roomType === 'private') {
-        room = getPrivateChannelById(roomId);
-    } else {
-        room = getChannelById(roomId);
-    }
-    return room || false;
-}
 
 module.exports = socketHandler;
