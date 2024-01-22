@@ -68,4 +68,20 @@ async function deletePrivateMessage(message_id) {
     }
 }
 
-module.exports = {createPrivateChannel, createPrivateMessage, getPrivateMessages, deletePrivateMessage};
+// get private channel by id
+async function getPrivateChannelById(channel_id) {
+    const client = await pool.connect();
+    const query = 'SELECT * FROM private_channels WHERE channel_id = $1';
+    const values = [channel_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error getting channel', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = {createPrivateChannel, createPrivateMessage, getPrivateMessages, deletePrivateMessage, getPrivateChannelById};

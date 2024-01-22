@@ -1,5 +1,5 @@
 const pool = require('../../database/dbConfig');
-const {createPrivateChannel, createPrivateMessage, getPrivateMessages, deletePrivateMessage} = require('../../database/privateChatModel');
+const {createPrivateChannel, createPrivateMessage, getPrivateMessages, deletePrivateMessage, getPrivateChannelById} = require('../../database/privateChatModel');
 
 describe('Private Chat Model', () => {
     it ('should create a private channel in the database', async () => {
@@ -28,6 +28,13 @@ describe('Private Chat Model', () => {
         expect(res[0]).toHaveProperty('channel_id');
         expect(res[0]).toHaveProperty('user_id');
         expect(res[0]).toHaveProperty('message');
+    });
+
+    it ('should get a private channel from the database by channel_id', async () => {
+        const res = await getPrivateChannelById(1);
+        expect(res).toHaveProperty('channel_id');
+        expect(res).toHaveProperty('user_id1');
+        expect(res).toHaveProperty('user_id2');
     });
 
     it ('should delete a message from the database', async () => {
