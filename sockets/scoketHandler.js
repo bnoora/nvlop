@@ -1,4 +1,7 @@
-const socketIO = require('socket.io');
+const {getUserByToken, checkTokenValid} = require('../database/userTokenModel');
+const {createPrivateMessage, deletePrivateMessage} = require('../database/privateChatModel');
+const {getChannelById } = require('../database/channelModel');
+const {createMessage, deleteMessage} = require('../database/messageModel'); 
 
 
 const socketHandler = (io) => {
@@ -6,16 +9,14 @@ const socketHandler = (io) => {
         console.log('a user connected');
 
         let isAuthenticated = false;
-        let userId = null;
+        let user = null;
 
         // Authentication
         socket.on('auth', async (token) => {
             console.log('auth: ' + token);
-            const auth = await checkAuth(token);
-            if (auth) {
+            user = await checkAuth(token);
+            if (user !== false) {
                 isAuthenticated = true;
-                // TODO: Get user ID from token
-                userId = 1;
                 socket.emit('auth', {status: 'ok'});
                 console.log('Authentication successful');
             } else {
@@ -52,9 +53,25 @@ const socketHandler = (io) => {
                 io.to(roomId).emit('message', msg);
                 // TODO: database insert
                 if (room.roomtype === 'private') {
-                    // insert into private ch
+                    createPrivateMessage(roomId, user.id, msg);
                 } else {
-                    // insert into public ch
+                    createMessage(roomId, user.id, msg);
+                }
+            }
+        });
+
+        socket.on('delete message', (msgId, roomId) => {
+            if (!isAuthenticated) {
+                console.log('Delete message attempt before authentication');
+                return;
+            }
+
+            if (socket.rooms.has(roomId)) {
+                io.to(roomId).emit('delete message', msgId);
+                if (room.roomtype === 'private') {
+                    deletePrivateMessage(msgId);
+                } else {
+                    deleteMessage(msgId);
                 }
             }
         });
@@ -66,21 +83,22 @@ const socketHandler = (io) => {
 };
 
 async function checkAuth(token) {
-    // Return true if authentication succeeds, false otherwise
-    return true; // Placeholder
+    const validity = await checkTokenValid(token);
+    if (validity === true) {
+        const user = await getUserByToken(token);
+        return user || false;
+    } else {
+        return false;
+    }
 }
 
 function roomFinder(roomId, roomType) {
-    // TODO: get channels from database
-    const predefinedRoomIds = [
-        {id: 'room1', roomtype: 'private'},
-        {id: 'room2', roomtype: 'public'},
-        {id: 'room3', roomtype: 'private'}
-    ];
-
-    const room = predefinedRoomIds.find((room) => {
-        return room.id === roomId && room.roomtype === roomType;
-    });
+    let room = null;
+    if (roomType === 'private') {
+        room = getPrivateChannelById(roomId);
+    } else {
+        room = getChannelById(roomId);
+    }
     return room || false;
 }
 
