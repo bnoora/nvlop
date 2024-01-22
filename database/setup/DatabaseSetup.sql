@@ -8,11 +8,14 @@ CREATE TABLE users (
     github_url VARCHAR(100),
     twitter_url VARCHAR(100),
     website_url VARCHAR(100),
+);
+
+CREATE TABLE user_token (
+    session_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
     token VARCHAR(100) NOT NULL,
-    one_time_token VARCHAR(100),
-    token_created_at TIMESTAMP,
-    one_time_token_created_at TIMESTAMP, 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month' NOT NULL
 );
 
 CREATE TABLE channels (
