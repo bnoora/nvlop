@@ -1,6 +1,6 @@
 const {createChannel, deleteChannel, getChannelById, getChannelsByUser, addUserToChannel, 
     removeUserFromChannel, addUserModerator, removeUserModerator, 
-    changeChannelOwner, getModStatus, checkUserInChannel} = require('../../database/channelModel');
+    changeChannelOwner, getModStatus} = require('../../database/channelModel');
 const pool = require('../../database/dbConfig');
 
 
