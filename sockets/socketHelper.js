@@ -1,6 +1,6 @@
-const {getUserByToken, checkTokenValid} = require('../database/userTokenModel');
-const {getChannelById } = require('../database/channelModel');
-const {getPrivateChannelById} = require('../database/privateChatModel');
+const {getUserByToken, checkTokenValid} = require('../ap/userTokenModel');
+const {getChannelById } = require('../api/channelModel');
+const {getPrivateChannelById} = require('../api/privateChatModel');
 
 async function checkAuth(token) {
     const validity = await checkTokenValid(token);

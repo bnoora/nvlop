@@ -1,5 +1,5 @@
-const {createPrivateMessage, deletePrivateMessage} = require('../database/privateChatModel');
-const {createMessage, deleteMessage} = require('../database/messageModel'); 
+const {createPrivateMessage, deletePrivateMessage} = require('../api/privateChatModel');
+const {createMessage, deleteMessage} = require('../api/messageModel'); 
 const {checkAuth, roomFinder} = require('./socketHelper');
 
 
