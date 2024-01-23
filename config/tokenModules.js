@@ -4,7 +4,8 @@ const generateRandomToken = require('../modules/tokenGenerator');
 async function generateToken(user_id) {
     await removeToken(user_id);
     const token = await generateRandomToken(user_id);
-    storeToken(token, user_id);
+    await storeToken(token, user_id);
+    return token;
 }
 
 async function storeToken(token, user_id) {
@@ -33,8 +34,8 @@ async function getStoredTokenOnLogin(user_id) {
     if (valid) {
         return token;
     } else {
-        generateToken(user_id);
-        return token;
+        const newtoken = generateToken(user_id);
+        return newtoken;
     }
 }
 
@@ -42,4 +43,4 @@ async function removeToken(user_id) {
     deleteUserToken(user_id);
 }
 
-module.exports = {generateToken, validateToken, getStoredTokenOnLogin, removeToken};
+module.exports = {generateToken, validateToken, getStoredTokenOnLogin, removeToken, storeToken};

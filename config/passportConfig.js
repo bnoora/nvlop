@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const {getUserByUsername} = require('../api/userModel');
 const {generateToken, validateToken, getStoredTokenOnLogin, removeToken} = require('./tokenModules');
 
