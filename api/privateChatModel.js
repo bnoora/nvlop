@@ -1,8 +1,9 @@
 const pool = require('./dbConfig');
 
 // Create a private channel in the database
-async function createPrivateChannel(user_id_1, user_id_2) {
+async function createPrivateChannel(data) {
     const client = await pool.connect();
+    const { user_id_1, user_id_2 } = data;
     const query = 'INSERT INTO private_channels (user_id1, user_id2) VALUES ($1, $2) RETURNING *';
     const values = [user_id_1, user_id_2];
     try {
@@ -34,8 +35,9 @@ async function createPrivateMessage(message_obj) {
 }
 
 // Get 50 private messages from the database by channel_id and either user_id
-async function getPrivateMessages(user_id_1, user_id_2, channel_id) {
+async function getPrivateMessages(data) {
     const client = await pool.connect();
+    const { user_id_1, user_id_2, channel_id } = data;
     const query = `SELECT * FROM private_messages 
                     WHERE (user_id = $1 AND channel_id = $3) 
                     OR (user_id = $2 AND channel_id = $3) 

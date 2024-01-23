@@ -1,4 +1,4 @@
-const pool = require('../../database/dbConfig');
+const pool = require('../../api/dbConfig');
 
 describe('Database Connection', () => {
   	it('should connect to the database successfully', async () => {

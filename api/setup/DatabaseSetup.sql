@@ -18,17 +18,39 @@ CREATE TABLE user_token (
     expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month' NOT NULL
 );
 
-CREATE TABLE channels (
-    channel_id SERIAL PRIMARY KEY,
+CREATE TABLE user_settings (
+    user_id INT REFERENCES users(user_id),
+    theme VARCHAR(10) NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+CREATE TABLE servers (
+    server_id SERIAL PRIMARY KEY,
     owner_id INT REFERENCES users(user_id),
-    channel_name VARCHAR(100) UNIQUE NOT NULL,
+    server_name VARCHAR(100) UNIQUE NOT NULL,
     description TEXT,
+    icon_url VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE channel_membership (
+CREATE TABLE server_invites (
+    invite_id SERIAL PRIMARY KEY,
+    server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
+    invite_code SERIAL UNIQUE NOT NULL DEFAULT 10000000,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE channels (
+    channel_id SERIAL PRIMARY KEY,
+    channel_name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT,
+    server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE server_membership (
     user_id INT REFERENCES users(user_id),
-    channel_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
+    server_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_mod BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (user_id, channel_id)
@@ -36,7 +58,7 @@ CREATE TABLE channel_membership (
 
 CREATE TABLE messages (
     message_id SERIAL PRIMARY KEY,
-    channel_id INT REFERENCES channels(channel_id),
+    channel_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
     user_id INT REFERENCES users(user_id),
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -45,7 +67,12 @@ CREATE TABLE messages (
 CREATE TABLE friends (
     user_id1 INT REFERENCES users(user_id),
     user_id2 INT REFERENCES users(user_id),
-    status VARCHAR(10) NOT NULL,
+    PRIMARY KEY (user_id1, user_id2)
+);
+
+CREATE TABLE friend_requests (
+    user_id1 INT REFERENCES users(user_id),
+    user_id2 INT REFERENCES users(user_id),
     PRIMARY KEY (user_id1, user_id2)
 );
 
