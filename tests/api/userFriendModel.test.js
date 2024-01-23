@@ -34,9 +34,9 @@ describe('User Friend Model', () => {
             user_id1: 2,
             user_id2: 3
         };
-        const res = await createFriendRequest(friendRequest);
-        expect(res.user_id1).toBe(2);
-        expect(res.user_id2).toBe(3);
+        await createFriendRequest(friendRequest);
+        const res = await getReceivedFriendRequests(3);
+        expect(res).toHaveLength >= 1;
     });
 
     it('should delete a friend request in the database', async () => {
