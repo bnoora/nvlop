@@ -1,10 +1,8 @@
 const pool = require('./dbConfig');
-const generateRandomToken = require('../modules/tokenGenerator');
 
 // Create new user token in the database
-async function createUserToken(user_id) {
+async function createUserToken(user_id, token) {
     const client = await pool.connect();
-    const token = await generateRandomToken();
     const query = 'INSERT INTO user_token (user_id, token) VALUES ($1, $2) RETURNING *';
     const values = [user_id, token];
     try {
@@ -66,10 +64,10 @@ async function getUserByToken(token) {
 }
 
 // Check token and expire time in the database, return true if token is valid
-async function checkTokenValid(token) {
+async function checkTokenValid(token, userId) {
     const client = await pool.connect();
-    const query = 'SELECT * FROM user_token WHERE token = $1';
-    const values = [token];
+    const query = 'SELECT * FROM user_token WHERE token = $1 AND user_id = $2';
+    const values = [token, userId];
     const now = new Date();
     try {
         const res = await client.query(query, values);
