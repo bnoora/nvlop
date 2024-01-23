@@ -1,4 +1,4 @@
-const {getFriends, createFriend, deleteFriend} = require('../../database/userFriendModel');
+const {getFriends, createFriend, deleteFriend, createFriendRequest, deleteFriendRequest, getSentFriendRequests, getReceivedFriendRequests} = require('../../api/userFriendModel');
 const pool = require('../../api/dbConfig');
 
 describe('User Friend Model', () => {
@@ -24,8 +24,27 @@ describe('User Friend Model', () => {
             user_id1: 1,
             user_id2: 3
         };
-        const res = await deleteFriend(friend);
-        const res2 = await getFriends(1);
-        expect(res2).toHaveLength(1);
+        await deleteFriend(friend);
+        const res = await getFriends(1);
+        expect(res).toHaveLength(1);
+    });
+
+    it('should create a friend request in the database', async () => {
+        const friendRequest = {
+            user_id1: 2,
+            user_id2: 3
+        };
+        const res = await createFriendRequest(friendRequest);
+        expect(res.user_id1).toBe(2);
+        expect(res.user_id2).toBe(3);
+    });
+
+    it('should delete a friend request in the database', async () => {
+        const friendRequest = {
+            user_id1: 2,
+            user_id2: 3
+        };
+        const res = await deleteFriendRequest(friendRequest);
+        expect(res).toBeUndefined();
     });
 });
