@@ -1,4 +1,3 @@
-const pool = require('../../api/dbConfig');
 const {createUserToken, getUserToken, deleteUserToken, getUserByToken, checkTokenValid} = require('../../api/userTokenModel');
 
 describe('User Token Model', () => {
@@ -27,7 +26,7 @@ describe('User Token Model', () => {
     });
 
     it('should check if a token is valid', async () => {
-        const res = await checkTokenValid('doxchtzvj8kc8hxoolg2ji00zo2zzam0');
+        const res = await checkTokenValid('bcrkrqxablnll7hjqb16mdy8z1s2ljg0');
         expect(res).toBe(true);
     });
 
