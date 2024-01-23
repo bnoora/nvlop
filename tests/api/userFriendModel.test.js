@@ -1,5 +1,5 @@
 const {getFriends, createFriend, deleteFriend} = require('../../database/userFriendModel');
-const pool = require('../../database/dbConfig');
+const pool = require('../../api/dbConfig');
 
 describe('User Friend Model', () => {
     it('should get all friends from the database by user_id', async () => {

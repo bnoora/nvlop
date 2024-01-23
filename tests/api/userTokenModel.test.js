@@ -1,5 +1,5 @@
-const pool = require('../../database/dbConfig');
-const {createUserToken, getUserToken, deleteUserToken, getUserByToken, checkTokenValid} = require('../../database/userTokenModel');
+const pool = require('../../api/dbConfig');
+const {createUserToken, getUserToken, deleteUserToken, getUserByToken, checkTokenValid} = require('../../api/userTokenModel');
 
 describe('User Token Model', () => {
 
