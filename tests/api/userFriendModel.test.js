@@ -47,4 +47,15 @@ describe('User Friend Model', () => {
         const res = await deleteFriendRequest(friendRequest);
         expect(res).toBeUndefined();
     });
+
+    it('should get all sent friend requests from the database by user_id', async () => {
+        const res = await getSentFriendRequests(2);
+        expect(res).toHaveLength === 0;
+    });
+
+    it('should get all received friend requests from the database by user_id', async () => {
+        const res = await getReceivedFriendRequests(3);
+        expect(res).toHaveLength === 0;
+    });
+
 });
