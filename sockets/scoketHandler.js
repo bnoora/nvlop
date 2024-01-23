@@ -9,6 +9,7 @@ const socketHandler = (io) => {
 
         let isAuthenticated = false;
         let user = null;
+        let userSockets = {};
 
         // Authentication
         socket.on('auth', async (token) => {
@@ -18,6 +19,7 @@ const socketHandler = (io) => {
                 isAuthenticated = true;
                 socket.emit('auth', {status: 'ok'});
                 console.log('Authentication successful');
+                userSockets[user.user_id] = socket.id;
             } else {
                 socket.emit('auth', {status: 'error'});
                 socket.disconnect();
@@ -75,8 +77,21 @@ const socketHandler = (io) => {
             }
         });
 
+        socket.on('send friend request', (friendId) => {
+            if (!isAuthenticated) {
+                console.log('Send friend request attempt before authentication');
+                return;
+            }
+            if (userSockets[friendId]) {
+                io.to(userSockets[friendId]).emit('friend request', user.user_id);
+            }
+        });
+
         socket.on('disconnect', () => {
             console.log('user disconnected');
+            if (isAuthenticated) {
+                delete userSockets[user.user_id];
+            }
         });
     });
 };
