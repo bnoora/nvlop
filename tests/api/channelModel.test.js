@@ -1,6 +1,4 @@
-const {createChannel, deleteChannel, getChannelById, getChannelsByUser, addUserToChannel, 
-    removeUserFromChannel, addUserModerator, removeUserModerator, 
-    changeChannelOwner, getModStatus} = require('../../api/channelModel');
+const {createChannel, deleteChannel, getChannelById} = require('../../api/channelModel');
 const pool = require('../../api/dbConfig');
 
 

@@ -1,4 +1,3 @@
-const pool = require('../../api/dbConfig');
 const {getServersByUser, addUserToServer, removeUserFromServer, 
     addUserModerator, removeUserModerator, changeChannelOwner, 
     getModStatus} = require('../../api/serverModel');

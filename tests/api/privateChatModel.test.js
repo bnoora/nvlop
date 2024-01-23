@@ -1,4 +1,3 @@
-const pool = require('../../api/dbConfig');
 const {createPrivateChannel, createPrivateMessage, getPrivateMessages, deletePrivateMessage, getPrivateChannelById} = require('../../api/privateChatModel');
 
 describe('Private Chat Model', () => {

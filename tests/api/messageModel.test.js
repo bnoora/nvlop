@@ -1,5 +1,4 @@
 const {createMessage, getMessagesByChannel, deleteMessage} = require('../../api/messageModel'); 
-const pool = require('../../api/dbConfig');
 
 describe('Message Model', () => {
 
