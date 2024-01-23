@@ -33,6 +33,13 @@ CREATE TABLE servers (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE server_invites (
+    invite_id SERIAL PRIMARY KEY,
+    server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
+    invite_code SERIAL UNIQUE NOT NULL DEFAULT 10000000,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE channels (
     channel_id SERIAL PRIMARY KEY,
     channel_name VARCHAR(100) UNIQUE NOT NULL,
@@ -51,7 +58,7 @@ CREATE TABLE server_membership (
 
 CREATE TABLE messages (
     message_id SERIAL PRIMARY KEY,
-    channel_id INT REFERENCES channels(channel_id),
+    channel_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
     user_id INT REFERENCES users(user_id),
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

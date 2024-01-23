@@ -15,6 +15,13 @@ VALUES
     (2, 'server3', 'server3 description') 
 ;
 
+INSERT INTO server_invites (server_id)
+VALUES
+    (1),
+    (2),
+    (3)
+;
+
 -- Create fake channels
 INSERT INTO channels (channel_name, description ,server_id)
 VALUES
