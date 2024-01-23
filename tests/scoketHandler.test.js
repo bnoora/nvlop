@@ -1,5 +1,5 @@
 const { checkAuth } = require('../sockets/socketHelper');
-const userTokenModel = require('../database/userTokenModel');
+const userTokenModel = require('../api/userTokenModel');
 
 // Mock the database functions
 jest.mock('../database/userTokenModel');
