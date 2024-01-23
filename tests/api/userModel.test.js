@@ -1,5 +1,4 @@
-const {createUser, getUserByUsername, getUserById} = require('../../database/userModel');
-const pool = require('../../api/dbConfig');
+const {createUser, getUserByUsername, getUserById} = require('../../api/userModel');
 
 function generateRandomUsername() {
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
