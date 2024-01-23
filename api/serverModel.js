@@ -4,7 +4,7 @@ const pool = require('./dbConfig');
 async function getServersByUser(user_id) {
     const client = await pool.connect();
     const query = `SELECT * FROM servers 
-                    JOIN server_membership ON servers.server_id = server_membership.servers_id
+                    JOIN server_membership ON servers.server_id = server_membership.server_id
                     WHERE server_membership.user_id = $1`;
     const values = [user_id];
     try {
@@ -22,7 +22,7 @@ async function getServersByUser(user_id) {
 async function addUserToServer(data) {
     const client = await pool.connect();
     const {server_id, user_id} = data;
-    const query = 'INSERT INTO server_membership (servers_id, user_id) VALUES ($1, $2) RETURNING *';
+    const query = 'INSERT INTO server_membership (server_id, user_id) VALUES ($1, $2) RETURNING *';
     const values = [server_id, user_id];
     try {
         const res = await client.query(query, values);
@@ -39,7 +39,7 @@ async function addUserToServer(data) {
 async function removeUserFromServer(data) {
     const client = await pool.connect();
     const {server_id, user_id} = data;
-    const query = 'DELETE FROM server_membership WHERE servers_id = $1 AND user_id = $2 RETURNING *';
+    const query = 'DELETE FROM server_membership WHERE server_id = $1 AND user_id = $2 RETURNING *';
     const values = [server_id, user_id];
     try {
         const res = await client.query(query, values);
@@ -56,7 +56,7 @@ async function removeUserFromServer(data) {
 async function addUserModerator(data) {
     const client = await pool.connect();
     const {server_id, user_id} = data;
-    const query = 'UPDATE server_membership SET is_mod = true WHERE servers_id = $1 AND user_id = $2 RETURNING *';
+    const query = 'UPDATE server_membership SET is_mod = true WHERE server_id = $1 AND user_id = $2 RETURNING *';
     const values = [server_id, user_id];
     try {
         const res = await client.query(query, values);
@@ -73,7 +73,7 @@ async function addUserModerator(data) {
 async function removeUserModerator(data) {
     const client = await pool.connect();
     const {server_id, user_id} = data;
-    const query = 'UPDATE server_membership SET is_mod = false WHERE servers_id = $1 AND user_id = $2 RETURNING *';
+    const query = 'UPDATE server_membership SET is_mod = false WHERE server_id = $1 AND user_id = $2 RETURNING *';
     const values = [server_id, user_id];
     try {
         const res = await client.query(query, values);
@@ -107,7 +107,7 @@ async function changeChannelOwner(data) {
 async function getModStatus(data) {
     const client = await pool.connect();
     const {server_id, user_id} = data;
-    const query = 'SELECT is_mod FROM server_membership WHERE servers_id = $1 AND user_id = $2';
+    const query = 'SELECT is_mod FROM server_membership WHERE server_id = $1 AND user_id = $2';
     const values = [server_id, user_id];
     try {
         const res = await client.query(query, values);
@@ -120,4 +120,5 @@ async function getModStatus(data) {
     }
 }
 
-module.exports = {getServersByUser, addUserToServer, removeUserFromServer, addUserModerator, removeUserModerator, changeChannelOwner, getModStatus};
+module.exports = {getServersByUser, addUserToServer, removeUserFromServer, addUserModerator, 
+    removeUserModerator, changeChannelOwner, getModStatus};
