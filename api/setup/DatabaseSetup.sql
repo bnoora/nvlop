@@ -38,6 +38,7 @@ CREATE TABLE server_invites (
     server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
     invite_code SERIAL UNIQUE NOT NULL DEFAULT 10000000,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month'
 );
 
 CREATE TABLE channels (
