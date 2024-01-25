@@ -1,10 +1,7 @@
-const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
-async function generateRandomToken(user_id) {
-    const todaysDateFormatted = new Date().toISOString().slice(0, 10);
-    const randomBytes = await crypto.randomBytes(25).toString('hex');
-    const token = todaysDateFormatted + randomBytes + user_id;
+async function generateWebToken(user) {
+    const secretKey = process.env.SECRET_KEY;
+    const token = await jwt.sign(user, secretKey);
     return token;
 }
-
-module.exports = generateRandomToken;
