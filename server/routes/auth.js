@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const checkLogin = require('../config/checkLogin');
 const generateWebToken = require('../config/tokenGenerator');
-import { createUser } from '../api/userModel';
+const {createUser} = require('../api/userModel');
 
 
 // Login POST request

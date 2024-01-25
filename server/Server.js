@@ -9,7 +9,7 @@ const authenticateToken = require('./config/authenticateToken');
 
 
 // Importing modules
-const socketHandler = require('./sockets/socketHandler');
+const socketHandler = require('./sockets/scoketHandler')
 
 // Import Routes
 const authRoutes = require('./routes/auth');
