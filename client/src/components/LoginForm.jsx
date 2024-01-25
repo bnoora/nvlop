@@ -1,11 +1,15 @@
 import { AuthContext } from "../context/AuthContext";
 import { useContext, useState } from "react";
 
-export default function LoginForm() {
+export default function LoginForm({ onRegisterClick }) {
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null); 
+
+    useEffect(() => {
+        setError(null); 
+    }, [username, password]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -34,8 +38,9 @@ export default function LoginForm() {
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit">Login</button>
+            <button type="submit" disabled={!username || !password}>Login</button>
             {error && <div>{error}</div>}
+            <button type="button" onClick={onRegisterClick}>Register</button>
         </form>
     );
 }
