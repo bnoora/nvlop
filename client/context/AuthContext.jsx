@@ -12,13 +12,14 @@ export const AuthProvider = ({ children }) => {
 
     // Check if user is logged in and has a valid cookie
     useEffect(() => {
-        const checkLoginStatus = () => {
+        function checkLoginStatus() {
             const userCookie = Cookies.get('user');
             if (userCookie) {
+                const user = JSON.parse(userCookie);
+                setUser(user);
                 setIsLoggedIn(true);
-                setUser(JSON.parse(userCookie));
             }
-        };
+        }
         checkLoginStatus();
     }, []);
 
@@ -48,8 +49,26 @@ export const AuthProvider = ({ children }) => {
         navigate('/');
     };
 
+    const register = async (username, password, email) => {
+        try {
+            const response = await axios.post('http://localhost:3001/register', { username, password, email });
+            if (response.status === 200) {
+                setIsLoggedIn(true);
+                setUser(response.data.user);
+                Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
+                navigate('/'); 
+            } else if (response.status === 401) {
+                throw new Error('Username or email already exists');
+            } else {
+                throw new Error('Unable to register, please try again later.');
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout, user }}>
+        <AuthContext.Provider value={{ isLoggedIn, login, logout, user, register }}>
             {children}
         </AuthContext.Provider>
     );
