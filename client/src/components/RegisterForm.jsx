@@ -1,7 +1,7 @@
 import { AuthContext } from "../context/AuthContext";
 import { useContext, useState } from "react";
 
-export default function RegisterForm({ onLoginClick}) {
+export default function RegisterForm({onLoginClick}) {
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -57,6 +57,7 @@ export default function RegisterForm({ onLoginClick}) {
                 onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <button type="submit" disabled={password !== confirmPassword || !username || !email || !password}>Login</button>
+            <button type="button" onClick={onLoginClick}>Login</button>
             {error && <div>{error}</div>}
         </form>
     );
