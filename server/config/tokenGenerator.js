@@ -5,3 +5,5 @@ async function generateWebToken(user) {
     const token = await jwt.sign(user, secretKey);
     return token;
 }
+
+module.exports = generateWebToken;
