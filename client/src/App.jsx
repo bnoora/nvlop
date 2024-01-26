@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import React from 'react';
 import { useContext } from 'react';
 
@@ -12,7 +12,7 @@ import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 
 function App() {
-  const { isLoggedIn } = useContext(AuthContext);
+  	const { isLoggedIn } = useContext(AuthContext);
 
 	return (
 		<Router>
