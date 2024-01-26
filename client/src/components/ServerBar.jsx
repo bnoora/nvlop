@@ -2,6 +2,7 @@ import { AuthContext } from "../context/AuthContext";
 import { UserContext } from "../context/UserContext";
 import { useContext, useEffect, useState } from "react";
 import ServerIcon from "./partials/ServerIcon";
+import AddServerForm from "./partials/AddServerForm";
 
 export default function ServerBar() {
     const { user } = useContext(AuthContext);
@@ -24,6 +25,7 @@ export default function ServerBar() {
                 </div>
             ))}
             <button onClick={handleToggleForm}>Add Server</button>
+            {showAddServerForm && <AddServerForm />}
         </div>
     );
 }
