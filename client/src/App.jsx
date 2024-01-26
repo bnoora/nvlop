@@ -15,19 +15,20 @@ function App() {
   const { isLoggedIn } = useContext(AuthContext);
 
   return (
-      <Router>
+    <Router>
         <Routes>
-          {isLoggedIn ? (
-            <UserProvider>
-              <Route path="/main" element={<MainPage />} />
-            </UserProvider>
-          ) : (
-            <>
-              <Route path="/login" element={<LoginPage />} />
-            </>
-          )}
+			<Route path="/" element={<Navigate replace to={isLoggedIn ? "/main" : "/login"} />} />
+        	{isLoggedIn ? (
+				<UserProvider>
+					<Route path="/main" element={<MainPage />} />
+				</UserProvider>
+          	) : (
+				<>
+				<Route path="/login" element={<LoginPage />} />
+				</>
+          	)}
         </Routes>
-      </Router>
+    </Router>
   );
   }
 
