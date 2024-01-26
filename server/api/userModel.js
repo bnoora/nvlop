@@ -50,4 +50,4 @@ async function getUserById(user_id) {
 }
 
 
-module.exports = {createUser, getUserByUsername, getUserById};
+module.exports = { createUser, getUserByUsername, getUserById };

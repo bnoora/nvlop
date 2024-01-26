@@ -1,4 +1,3 @@
-const {getUserByToken, checkTokenValid} = require('../ap/userTokenModel');
 const {getChannelById } = require('../api/channelModel');
 const {getPrivateChannelById} = require('../api/privateChatModel');
 
