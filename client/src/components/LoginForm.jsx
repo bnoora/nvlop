@@ -24,6 +24,16 @@ export default function LoginForm({ onRegisterClick }) {
         }
     };
 
+    const handleTrialLogin = async () => {
+        setUsername('trial');
+        setPassword('trial');
+        try {
+            await login('trial', 'trial');
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     return (
         <form onSubmit={handleSubmit}>
             <input 
@@ -41,6 +51,7 @@ export default function LoginForm({ onRegisterClick }) {
             <button type="submit" disabled={!username || !password}>Login</button>
             {error && <div>{error}</div>}
             <button type="button" onClick={onRegisterClick}>Register</button>
+            <button type="button" onClick={handleTrialLogin}>Trial Login</button>
         </form>
     );
 }
