@@ -3,6 +3,8 @@ const router = express.Router();
 const checkLogin = require('../config/checkLogin');
 const generateWebToken = require('../config/tokenGenerator');
 const {createUser} = require('../api/userModel');
+const bcrypt = require('bcryptjs');
+const {getUserByUsername} = require('../api/userModel');
 
 
 // Login POST request
@@ -27,10 +29,11 @@ router.post('/login', function(req, res) {
     
 // Register POST request
 router.post('/register', (req, res) => {
-    console.log('register request');
     const user_obj = req.body;
+
     async function register() {
         try {
+            const password = user_obj.password;
             const hashedPassword = await bcrypt.hash(password, 10);
             const user = await createUser({ ...user_obj, password: hashedPassword});
             const token = await generateWebToken(user.user_id);
@@ -39,6 +42,7 @@ router.post('/register', (req, res) => {
             github_url: user.github_url, twitter_url: user.twitter_url, linkedin_url: user.linkedin_url};
             return res.status(200).json({ message: 'Registration successful', user: returnUser, token: token});
         } catch (err) {
+            console.log(err);
             return res.status(500).json({ error: err.message, 
                 message: 'Registration failed or user already exists'});
         }
@@ -47,14 +51,17 @@ router.post('/register', (req, res) => {
 });
 
 // Login with cookie present
-router.get('/login', (req, res) => {
-    console.log('login request');
-    const user = req.user;
-    if (user) {
-        return res.status(200).json({ message: 'Login successful', user: user});
-    } else {
-        return res.status(500).json({ error: 'No user logged in', message: 'Login failed'});
+router.post('/cookie', (req, res) => {
+    async function login() {
+        const user = req.username;
+        const returnUser = await getUserByUsername(user);
+        if (returnUser.success === true) {
+            return res.status(200).json({ message: 'Login successful', user: returnUser, success: true});
+        } else {
+            return res.status(500).json({ error: 'No user logged in', message: 'Login failed'});
+        }
     }
+    login();
 });
 
 
