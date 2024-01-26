@@ -1,5 +1,7 @@
 import react, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 
 
 export const AuthContext = createContext();
@@ -63,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, user, register }}>
-            {children}
+        {children}
         </AuthContext.Provider>
     );
 };
