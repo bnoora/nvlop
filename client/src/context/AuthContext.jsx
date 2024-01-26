@@ -1,6 +1,5 @@
 import react, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 
 export const AuthContext = createContext();
@@ -8,8 +7,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
-    let navigate = useNavigate();
-
     // Check if user is logged in and has a valid cookie
     useEffect(() => {
         function checkLoginStatus() {
@@ -31,7 +28,6 @@ export const AuthProvider = ({ children }) => {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
                 Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
-                navigate('/'); 
             } else if (response.status === 401) {
                 throw new Error('Invalid credentials');
             } else {
@@ -46,7 +42,6 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
         setUser(null);
         Cookies.remove('user');
-        navigate('/');
     };
 
     const register = async (username, password, email) => {
@@ -56,7 +51,6 @@ export const AuthProvider = ({ children }) => {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
                 Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
-                navigate('/'); 
             } else if (response.status === 401) {
                 throw new Error('Username or email already exists');
             } else {

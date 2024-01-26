@@ -1,5 +1,5 @@
 import { AuthContext } from "../context/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 export default function LoginForm({ onRegisterClick }) {
     const { login } = useContext(AuthContext);

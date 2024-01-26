@@ -1,22 +1,20 @@
-import react, { createContext, useState, useEffect } from 'react';
+import react, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const { user } = useContext(AuthContext);
-    let navigate = useNavigate();
     const [servers, setServers] = useState([]);
     const [friends, setFriends] = useState([]);
 
     // Check if user is logged in and if not redirect to login page
     useEffect(() => {
         if (!user) {
-            navigate('/login');
+            console.log('User not logged in');
         }
-    }, [user, navigate]);
+    }, [user]);
 
     // Get all servers for the user
     useEffect(() => {
