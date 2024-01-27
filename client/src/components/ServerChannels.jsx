@@ -2,7 +2,7 @@ import React from "react";
 import ChannelRows from "./ChannelRows";
 
 export default function ServerChannels(props) {
-    const { channels, onChannelClick } = props;
+    const { channels, onChannelClick, onToggleForm } = props;
 
     return (
         <div>
@@ -11,10 +11,7 @@ export default function ServerChannels(props) {
                     <ChannelRows channel={channel} onChannelClick={onChannelClick} />
                 </div>
             ))}
-            <button onClick={handleToggleForm}>Add Channel+</button>
-            {showAddChannelForm && <AddChaannelForm server={server} onToggleForm={handleToggleForm} />}
+            <button onClick={onToggleForm}>Add Channel+</button>
         </div>
     );
-
-
 }

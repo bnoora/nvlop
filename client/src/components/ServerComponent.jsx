@@ -4,7 +4,8 @@ import axios from 'axios';
 import ServerChannels from "./ServerChannels";
 import MessageComponent from "./MessageComponent";
 
-export default function ServerComponent({ server }) {
+export default function ServerComponent(props) {
+    const { server, onToggleForm } = props;
     const [channels, setChannels] = useState([]);
     const [selectedChannel, setSelectedChannel] = useState(null);
 
@@ -34,7 +35,8 @@ export default function ServerComponent({ server }) {
         <div>
             <div>
                 <h1>{server.name}</h1>
-                <ServerChannels channels={channels} onChannelClick={handleChannelClick} />
+                <ServerChannels channels={channels} onChannelClick={handleChannelClick} 
+                                onToggleForm={onToggleForm} />
             </div>
             <MessageComponent server={server} channel={selectedChannel} privateMsg={false} />
         </div>
