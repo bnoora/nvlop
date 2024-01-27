@@ -9,7 +9,10 @@ import ServerBar from "../components/ServerBar";
 import FriendComponent from "../components/FriendComponent";
 import ServerComponent from "../components/ServerComponent";
 
-
+// Forms 
+import AddServerForm from "../components/partials/AddServerForm";
+import AddFriendForm from "../components/partials/AddFriendForm";
+import AddChannelForm from "../components/partials/AddChannelForm";
 
 export default function MainPage() {
     const { user } = useContext(AuthContext);
@@ -22,6 +25,7 @@ export default function MainPage() {
     const [showAddServerForm, setShowAddServerForm] = useState(false);
     const [showAddFriendForm, setShowAddFriendForm] = useState(false);
     const [showAddChannelForm, setShowAddChannelForm] = useState(false);
+    const [server, setServer] = useState();
 
 
     useEffect(() => {
@@ -38,16 +42,34 @@ export default function MainPage() {
         setShowFriendComponent(true);
     };
 
-    const handleToggleServerComponent = () => {
+    const handleToggleServerComponent = (selectedServer) => {
         setShowFriendComponent(false);
         setShowServerComponent(true);
+        setServer(selectedServer);
+    };
+
+    // HANDLERS FOR FORMS
+    const handleToggleAddServerForm = () => {
+        setShowAddServerForm(!showAddServerForm);
+    };
+
+    const handleToggleAddChannelForm = () => {
+        setShowAddChannelForm(!showAddChannelForm);
+    };
+
+    const handleToggleAddFriendForm = () => {
+        setShowAddFriendForm(!showAddFriendForm);
     };
 
     return (
         <div>
-            <ServerBar onServerClick={handleToggleServerComponent} onFriendClick={handleToggleFriendComponent}/>
-            {showServerComponent && <ServerComponent servers={servers}/>}
+            <ServerBar onServerClick={handleToggleServerComponent} onFriendClick={handleToggleFriendComponent}
+            servers={servers} onAddServer={handleToggleAddServerForm}/>
+            {showServerComponent && <ServerComponent server={server}/>}
             {showFriendComponent && <FriendComponent friends={friends}/>}
+            {showAddServerForm && <AddServerForm user={user} onToggleForm={handleToggleAddServerForm}/>}
+            {showAddFriendForm && <AddFriendForm user={user} onToggleForm={handleToggleAddFriendForm}/>}
+            {showAddChannelForm && <AddChannelForm server={server} onToggleForm={handleToggleAddChannelForm} />}
         </div>
     );
 }
