@@ -5,7 +5,7 @@ import MessageInput from './partials/MessageInput';
 import { UserContext } from "../context/UserContext";
 
 export default function MessageComponent(props) {
-    const { server, channel, privateMsg, friend } = props;
+    const { server, channel, friend } = props;
     const {user} = useContext(UserContext);
     const [messages, setMessages] = useState([]);
 
@@ -22,7 +22,7 @@ export default function MessageComponent(props) {
     
     return (
         <div>
-            <TopMessageBar privateMsg={privateMsg} friend={friend}/>
+            <TopMessageBar name={channel.name}/>
             <div>
                 {messages.map((msg) => (
                     <MessageRow key={msg.id} message={msg} />
