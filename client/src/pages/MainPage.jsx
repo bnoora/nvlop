@@ -16,7 +16,7 @@ import AddChannelForm from "../components/partials/AddChannelForm";
 
 export default function MainPage() {
     const { user } = useContext(AuthContext);
-    const { servers, friends } = useContext(UserContext);
+    const { servers } = useContext(UserContext);
     const navigate = useNavigate();
 
     // STATES 
@@ -66,7 +66,7 @@ export default function MainPage() {
             <ServerBar onServerClick={handleToggleServerComponent} onFriendClick={handleToggleFriendComponent}
             servers={servers} onAddServer={handleToggleAddServerForm}/>
             {showServerComponent && <ServerComponent server={server} onToggleForm={handleToggleAddServerForm}/>}
-            {showFriendComponent && <FriendComponent friends={friends}/>}
+            {showFriendComponent && <FriendComponent onToggleForm={handleToggleAddFriendForm}/>}
             {showAddServerForm && <AddServerForm user={user} onToggleForm={handleToggleAddServerForm}/>}
             {showAddFriendForm && <AddFriendForm user={user} onToggleForm={handleToggleAddFriendForm}/>}
             {showAddChannelForm && <AddChannelForm server={server} onToggleForm={handleToggleAddChannelForm} />}
