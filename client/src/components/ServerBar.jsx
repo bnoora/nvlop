@@ -1,31 +1,22 @@
-import { AuthContext } from "../context/AuthContext";
-import { UserContext } from "../context/UserContext";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import ServerIcon from "./partials/ServerIcon";
-import AddServerForm from "./partials/AddServerForm";
 
-export default function ServerBar() {
-    const { user } = useContext(AuthContext);
-    const { servers } = useContext(UserContext);
-    const [showAddServerForm, setShowAddServerForm] = useState(false);
-    const [error, setError] = useState(null);
-
-    const handleToggleForm = () => {
-        setShowAddServerForm(!showAddServerForm);
-    };
+export default function ServerBar(props) {
+    const { onServerClick, onFriendClick, servers, onAddServer } = props;
 
     useEffect(() => {
+        console.log("ServerBar rendered");
     }, [servers]);
 
     return (
         <div>
+            <button onClick={onFriendClick}>Friends</button>
             {servers.map((server) => (
                 <div key={server.id}>
-                    <ServerIcon server={server} />
+                    <ServerIcon server={server} onClick={() => onServerClick(server)} />
                 </div>
             ))}
-            <button onClick={handleToggleForm}>Add Server</button>
-            {showAddServerForm && <AddServerForm />}
+            <button onClick={onAddServer}>Add Server+</button>
         </div>
     );
 }
