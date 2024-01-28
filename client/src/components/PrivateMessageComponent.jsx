@@ -7,7 +7,6 @@ import { UserContext } from "../context/UserContext";
 export default function PrivateMessageComponent ({friend}) {
     const {user} = useContext(UserContext);
     const [messages, setMessages] = useState([]);
-    const friend = friend;
 
     useEffect(() => {
         console.log("MessageComponent rendered");

@@ -1,5 +1,5 @@
 import React from "react";
-import ChannelRows from "./ChannelRows";
+import ChannelRows from "./partials/ChannelRows";
 
 export default function ServerChannels(props) {
     const { channels, onChannelClick, onToggleForm } = props;

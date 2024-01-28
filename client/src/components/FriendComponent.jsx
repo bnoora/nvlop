@@ -11,7 +11,6 @@ export default function FriendComponent({onToggleForm}) {
     const [selectedFriend, setSelectedFriend] = useState(null);
     const [showFriendRequests, setShowFriendRequests] = useState(false);
     const [showPrivateMessages, setShowPrivateMessages] = useState(true);
-    const onToggleForm = onToggleForm
 
     const handleFriendClick = (friend) => {
         setSelectedFriend(friend);
@@ -37,6 +36,4 @@ export default function FriendComponent({onToggleForm}) {
             {showFriendRequests && <FriendRequests />}
         </div>
     );
-
-
 }
