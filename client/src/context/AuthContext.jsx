@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in and has a valid cookie
     useEffect(() => {
         function checkLoginStatus() {
-            const userCookie = Cookies.get('user');
+            const userCookie = Cookies.get('nvlopuser');
             if (userCookie) {
                 const user = JSON.parse(userCookie);
                 setUser(user);
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
-                Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
+                Cookies.set('nvlopuser', JSON.stringify(response.data.user), { expires: 30 });
             } else if (response.status === 401) {
                 throw new Error('Invalid credentials');
             } else {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setIsLoggedIn(false);
         setUser(null);
-        Cookies.remove('user');
+        Cookies.remove('nvlopuser');
     };
 
     const register = async (username, password, email) => {
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
-                Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
+                Cookies.set('nvlopuser', JSON.stringify(response.data.user), { expires: 30 });
             } else if (response.status === 401) {
                 throw new Error('Username or email already exists');
             } else {
