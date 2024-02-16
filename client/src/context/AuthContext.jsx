@@ -1,49 +1,56 @@
 import react, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-
-
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
-    // Check if user is logged in and has a valid cookie
+
+
     useEffect(() => {
-        function checkLoginStatus() {
-            const userCookie = Cookies.get('user');
-            if (userCookie) {
-                const user = JSON.parse(userCookie);
-                setUser(user);
-                setIsLoggedIn(true);
+        async function checkLoginStatus() {
+            try {
+                const response = await axios.get('http://localhost:3001/check-login');
+                if (response.status === 200 && response.data.isLoggedIn) {
+                    setIsLoggedIn(true);
+                    setUser(response.data.user);
+                } else {
+                    setIsLoggedIn(false);
+                    setUser(null);
+                }
+            } catch (error) {
+                console.error('Failed to check login status', error);
+                setIsLoggedIn(false);
+                setUser(null);
             }
         }
         checkLoginStatus();
     }, []);
 
-    
     const login = async (username, password) => {
         try {
             const response = await axios.post('http://localhost:3001/login', { username, password });
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
-                Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
-            } else if (response.status === 401) {
-                throw new Error('Invalid credentials');
             } else {
-                throw new Error('Unable to login, please try again later.');
+                // Handle non 200 res
+                throw new Error('Login failed');
             }
         } catch (error) {
             throw error;
         }
     };
 
-    const logout = () => {
-        setIsLoggedIn(false);
-        setUser(null);
-        Cookies.remove('user');
+    const logout = async () => {
+        try {
+            await axios.post('http://localhost:3001/logout');
+            setIsLoggedIn(false);
+            setUser(null);
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
     };
 
     const register = async (username, password, email) => {
@@ -52,20 +59,17 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
-                Cookies.set('user', JSON.stringify(response.data.user), { expires: 30 });
-            } else if (response.status === 401) {
-                throw new Error('Username or email already exists');
             } else {
-                throw new Error('Unable to register, please try again later.');
+                throw new Error('Registration failed');
             }
         } catch (error) {
             throw error;
         }
-    }
+    };
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, user, register }}>
-        {children}
+            {children}
         </AuthContext.Provider>
     );
 };
