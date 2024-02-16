@@ -4,7 +4,6 @@ const checkLogin = require('../config/checkLogin');
 const generateWebToken = require('../config/tokenGenerator');
 const {createUser, getUserById} = require('../api/userModel');
 const bcrypt = require('bcryptjs');
-const {getUserByUsername, getUserById} = require('../api/userModel');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const {createSessionToken, removeSessionToken} = require('../api/sessionModel');
