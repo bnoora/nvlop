@@ -30,4 +30,4 @@ function checkAllowedToJoinRoom(roomId, roomType, userId) {
     return true;
 }
 
-module.exports = {checkAuth, roomFinder};
+module.exports = {checkAuth, roomFinder, checkAllowedToDelete, checkAllowedToJoinRoom};
