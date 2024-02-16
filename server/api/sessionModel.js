@@ -33,4 +33,20 @@ async function removeSessionToken(sessionToken) {
     }
 }
 
-module.exports = { createSessionToken, removeSessionToken };
+// Get a user session by the userid
+async function getUserSessionById(user_id) {
+    const client = await pool.connect();
+    const query = 'SELECT * FROM session WHERE user_id = $1';
+    const values = [user_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error getting user session', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = { createSessionToken, removeSessionToken, getUserSessionById };
