@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const checkLogin = require('../config/checkLogin');
 const generateWebToken = require('../config/tokenGenerator');
-const {createUser} = require('../api/userModel');
+const {createUser, getUserById} = require('../api/userModel');
 const bcrypt = require('bcryptjs');
-const {getUserByUsername} = require('../api/userModel');
+const {getUserByUsername, getUserById} = require('../api/userModel');
 const jwt = require('jsonwebtoken');
 
 
@@ -22,7 +22,15 @@ router.post('/login', async (req, res) => {
         const user = await checkLogin(username, password);
         if (user.success) {
             const token = await generateWebToken(user.user_id);
-            return res.status(200).json({ message: 'Login successful', user: user.user, token });
+            // Set the token as a cookie 
+            res.cookie('token', token, {
+                httpOnly: true, // The cookie is not accessible via JavaScript
+                secure: true, 
+                sameSite: 'strict', 
+                maxAge: 24 * 60 * 60 * 10000 
+            });
+
+            return res.status(200).json({ message: 'Login successful', user: user.user });
         } else {
             // Use 401 for unauthorized access
             return res.status(401).json({ message: 'Login failed', error: user.message });
@@ -46,7 +54,15 @@ router.post('/register', (req, res) => {
         const returnUser = { user_id: user.user_id, username: user.username, email: user.email,
             avatar_url: user.avatar_url, bio: user.bio, created_at: user.created_at,
             github_url: user.github_url, twitter_url: user.twitter_url, linkedin_url: user.linkedin_url};
-        return res.status(200).json({ message: 'Registration successful', user: returnUser, token: token});
+        // Set the token as a cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true, 
+            sameSite: 'strict', 
+            maxAge: 24 * 60 * 60 * 10000 
+        });
+
+        return res.status(200).json({ message: 'Registration successful', user: returnUser});
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: err.message, message: 'Registration failed or user already exists'});
@@ -54,21 +70,30 @@ router.post('/register', (req, res) => {
 });
 
 
-router.post('/validate-and-refresh-token', (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1];
+router.post('/check-login', (req, res) => {
+    const token = req.cookies.token;
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
+        return res.status(200).json({ isLoggedIn: false });
+    }
+
+    if (!token) {
+        return res.status(401).json({ isLoggedIn: false, message: "No authentication token found" });
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
-            return res.status(401).json({ message: 'Invalid token' });
+            // Token is invalid or expired
+            return res.status(401).json({ isLoggedIn: false, message: "Invalid or expired token" });
         }
-
-        // Token is valid; issue a new one
-        const newToken = jwt.sign({ userId: decoded.userId }, process.env.SECRET_KEY, { expiresIn: '1h' });
-        return res.json({ token: newToken });
+        userId = decoded.userId;
+        user = getUserById(userId);
+        return res.json({ isLoggedIn: true, user: user});
     });
+});
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    return res.status(200).json({ message: 'Logged out' });
 });
 
 module.exports = router;
