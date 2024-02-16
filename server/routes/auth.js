@@ -72,13 +72,17 @@ router.post('/register', (req, res) => {
 
 
 router.post('/check-login', (req, res) => {
-    const token = req.cookies.token;
-    if (!token) {
-        return res.status(200).json({ isLoggedIn: false });
+    let token = null;
+    if (req.cookies.token) {
+        token = req.cookies.token;
+        console.log('Token found');
+    } else {
+        console.log('No token found');
+        return res.status(401).json({ message: "No authentication token found" });
     }
 
     if (!token) {
-        return res.status(401).json({ isLoggedIn: false, message: "No authentication token found" });
+        return res.status(200).json({ isLoggedIn: false });
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {

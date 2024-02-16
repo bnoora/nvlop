@@ -11,16 +11,16 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         async function checkLoginStatus() {
             try {
-                const response = await axios.get('http://localhost:3001/api/auth/check-login');
+                const response = await axios.post('http://localhost:3001/api/auth/check-login');
                 if (response.status === 200 && response.data.isLoggedIn) {
                     setIsLoggedIn(true);
                     setUser(response.data.user);
                 } else {
                     setIsLoggedIn(false);
                     setUser(null);
+                    console.error('Not logged in');
                 }
             } catch (error) {
-                console.error('Failed to check login status', error);
                 setIsLoggedIn(false);
                 setUser(null);
             }
