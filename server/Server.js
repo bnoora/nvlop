@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
-const authenticateToken = require('./config/authenticateToken');
+const cookieParser = require('cookie-parser');
 
 
 // Importing modules
@@ -28,6 +28,7 @@ const io = new Server(server);
 const port = process.env.PORT || 3000;
 
 // Middleware
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors(
     {
@@ -49,7 +50,7 @@ app.get('/', (req, res) => {
 });
 
 // jwt middleware
-app.use(authenticateToken);
+// app.use(authenticateToken);
 
 // jwt routes
 app.use('/api/channels', channelRoutes);
