@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         async function getSessionToken() {
             try {
-                const response = await axios.post('http://localhost:3001/socket-auth');
+                const response = await axios.post('http://localhost:3001/api/auth/socket-auth');
                 if (response.status === 200) {
                     setSessionToken(response.data.sessionToken);
                 } else {
@@ -57,7 +57,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         async function getServers() {
             try {
-                const response = await axios.get('http://localhost:3001/get-user-servers');
+                const response = await axios.get('http://localhost:3001/api/servers/get-user-servers');
                 if (response.status === 200) {
                     setServers(response.data.servers);
                 } else {
@@ -74,7 +74,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         async function getFriends() {
             try {
-                const response = await axios.get('http://localhost:3001/get-friends');
+                const response = await axios.get('http://localhost:3001/api/userFriends/get-friends');
                 if (response.status === 200) {
                     setFriends(response.data.friends);
                 } else {

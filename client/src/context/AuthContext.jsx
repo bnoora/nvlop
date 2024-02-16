@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         async function checkLoginStatus() {
             try {
-                const response = await axios.get('http://localhost:3001/check-login');
+                const response = await axios.get('http://localhost:3001/api/auth/check-login');
                 if (response.status === 200 && response.data.isLoggedIn) {
                     setIsLoggedIn(true);
                     setUser(response.data.user);
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:3001/login', { username, password });
+            const response = await axios.post('http://localhost:3001/api/auth/login', { username, password });
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post('http://localhost:3001/logout');
+            await axios.post('http://localhost:3001/api/auth/logout');
             setIsLoggedIn(false);
             setUser(null);
         } catch (error) {
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (username, password, email) => {
         try {
-            const response = await axios.post('http://localhost:3001/register', { username, password, email });
+            const response = await axios.post('http://localhost:3001/api/auth/register', { username, password, email });
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
