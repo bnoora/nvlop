@@ -62,6 +62,11 @@ app.use('/api/userFriends', userFriendRouter);
 
 socketHandler(io);
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
