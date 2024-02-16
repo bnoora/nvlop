@@ -6,6 +6,8 @@ const {createUser, getUserById} = require('../api/userModel');
 const bcrypt = require('bcryptjs');
 const {getUserByUsername, getUserById} = require('../api/userModel');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const {createSessionToken, removeSessionToken} = require('../api/sessionModel');
 
 
 // Login POST request
@@ -94,6 +96,24 @@ router.post('/check-login', (req, res) => {
 router.post('/logout', (req, res) => {
     res.clearCookie('token');
     return res.status(200).json({ message: 'Logged out' });
+});
+
+
+router.post('/socket-auth', async (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: "No authentication token found" });
+    }
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ message: "Invalid or expired token" });
+        }
+        const sessionToken = crypto.randomBytes(64).toString('hex');
+        const userId = decoded.userId;
+        createSessionToken({ user_id: userId, token: sessionToken });
+        return res.status(200).json({ message: "Socket authenticated", sessionToken: sessionToken });
+    });
 });
 
 module.exports = router;
