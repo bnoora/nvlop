@@ -3,19 +3,26 @@ import ServerIcon from "./partials/ServerIcon";
 
 export default function ServerBar(props) {
     const { onServerClick, onFriendClick, servers, onAddServer } = props;
-
-    useEffect(() => {
-        console.log("ServerBar rendered");
-    }, [servers]);
+    
+    if (!servers) {
+        return <div>Loading...</div>; // Or any other placeholder you wish to show
+    }
 
     return (
         <div>
             <button onClick={onFriendClick}>Friends</button>
-            {servers.map((server) => (
-                <div key={server.id}>
-                    <ServerIcon server={server} onClick={() => onServerClick(server)} />
-                </div>
-            ))}
+            {
+                servers.length === 0 ? (
+                    <div>No servers</div>
+                ) : (
+                    servers.map((server) => (
+                    <div key={server.id}>
+                        <ServerIcon server={server} onClick={() => onServerClick(server)} />
+                    </div>
+                    ))
+                )
+            }
+
             <button onClick={onAddServer}>Add Server+</button>
         </div>
     );
