@@ -1,3 +1,4 @@
+const { json } = require('express');
 const pool = require('./dbConfig');
 
 // Get all friends from the database by user_id
@@ -7,7 +8,7 @@ async function getFriends(user_id) {
     const values = [user_id];
     try {
         const res = await client.query(query, values);
-        return res.rows;
+        return json(res.rows);
     } catch (err) {
         console.error('Error getting friends', err);
         throw err;
