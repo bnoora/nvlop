@@ -21,7 +21,7 @@ export default function PrivateMessageComponent ({friend}) {
 
     return (
         <div>
-            <TopMessageBar name={friend.name}/>
+            {friend ? <TopMessageBar name={friend.name}/> : <h1>Private Messages</h1>}
             <div>
                 {messages.map((msg) => (
                     <MessageRow key={msg.id} message={msg} />
