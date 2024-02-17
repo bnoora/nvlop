@@ -6,11 +6,10 @@ import io from 'socket.io-client';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const { user } = useContext(AuthContext);
+    const { user, isLoading, userId } = useContext(AuthContext);
     const [servers, setServers] = useState([]);
     const [friends, setFriends] = useState([]);
     const [sessionToken, setSessionToken] = useState(''); // This is the session token for the user
-    const [user_id, setUser_id] = useState(''); // This is the user id for the user
 
     // useEffect(() => {
     //     function doesCookieExist(cookieName) {
@@ -26,21 +25,22 @@ export const UserProvider = ({ children }) => {
     //     }        
     // }, [user]);
 
-    useEffect(() => {
-        console.log('User');
-        console.log(user);
-        if (!user) return;
-        setUser_id(user.user_id);
-    }, [user]);
-
     // get the session token for the user
+
+    // useEffect(() => {
+    //     console.log(isLoading);
+    //     console.log(user);
+    //     console.log(userId);
+    // }, [isLoading, user, userId]);
+
     useEffect(() => {
-        if (!user) return;
-        console.log(user);
+        if (isLoading || !user || userId) return;
+
         async function getSessionToken() {
             try {
-                const response = await axios.post('http://localhost:3001/api/auth/socket-auth', {params: { user_id: user_id }}, {
-                    withCredentials: true
+                const response = await axios.post('http://localhost:3001/api/auth/socket-auth', 
+                { params: { user_id: userId }}, 
+                { withCredentials: true
                 });       
                 if (response.status === 200) {
                     setSessionToken(response.data.sessionToken);
@@ -52,12 +52,12 @@ export const UserProvider = ({ children }) => {
             }
         }
         getSessionToken();
-    }, [user]);
+    }, [user, isLoading, userId]);
 
 
     // Connect to the socket server
     useEffect(() => {
-        if (!user) return;
+        if (isLoading || !user || userId) return;
         if (!sessionToken) return;
 
         const socket = io('http://localhost:3001', {
@@ -75,13 +75,12 @@ export const UserProvider = ({ children }) => {
 
     // Get all servers for the user
     useEffect(() => {
-        if (!user) return;
+        if (isLoading || !user || !userId) return;
         async function getServers() {
             try {
-                // send userid to get all servers for the user
-
+                console.log('getting servers');
                 const response = await axios.get('http://localhost:3001/api/servers/get-user-servers', {
-                    params: { user_id: user_id }
+                    params: { user_id: userId }
                 });
                 if (response.status === 200) {
                     setServers(response.data.servers);
@@ -93,15 +92,15 @@ export const UserProvider = ({ children }) => {
             }
         }
         getServers();
-    }, [user]);
+    }, [user, isLoading, userId]);
 
     // Get all friends for the user
     useEffect(() => {
-        if (!user) return;
+        if (isLoading || !user || userId) return;
         async function getFriends() {
             try {
                 const response = await axios.get(`http://localhost:3001/api/servers/get-user-servers`, {
-                    params: { user_id: user_id }
+                    params: { user_id: userId }
                 });
                 if (response.status === 200) {
                     setFriends(response.data.friends);
@@ -113,7 +112,7 @@ export const UserProvider = ({ children }) => {
             }
         }
         getFriends();
-    }, [user]);
+    }, [user, isLoading, userId]);
 
     return (
         <UserContext.Provider value={{ servers, friends }}>
