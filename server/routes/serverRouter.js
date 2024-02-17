@@ -77,8 +77,9 @@ router.get('/get-mod-status', async (req, res) => {
 
 router.post('/add-server', async (req, res) => {
     try {
-        const user_id = parseInt(req.body.user_id);
-        const server = await addNewServer(req.body.server_name, user_id);
+        const user_id = parseInt(req.body.userId);
+        const serverName = req.body.serverName;
+        const server = await addNewServer(serverName, user_id);
         res.status(200).json(server);
     } catch (err) {
         res.status(500).json({error: err});

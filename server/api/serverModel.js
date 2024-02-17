@@ -19,9 +19,8 @@ async function getServersByUser(user_id) {
 }
 
 // Add a user to a channel
-async function addUserToServer(data) {
+async function addUserToServer(server_id, user_id) {
     const client = await pool.connect();
-    const {server_id, user_id} = data;
     const query = 'INSERT INTO server_membership (server_id, user_id) VALUES ($1, $2) RETURNING *';
     const values = [server_id, user_id];
     try {
@@ -120,13 +119,14 @@ async function getModStatus(data) {
     }
 }
 
-async function addNewServer(data) {
+async function addNewServer(serverName, user_id) {
     const client = await pool.connect();
-    const {server_name, user_id} = data;
     const query = 'INSERT INTO servers (server_name, owner_id) VALUES ($1, $2) RETURNING *';
-    const values = [server_name, user_id];
+    const values = [serverName, user_id];
     try {
         const res = await client.query(query, values);
+        const server_id = parseInt(res.rows[0].server_id);
+        await addUserToServer(server_id, user_id);
         return res.rows[0];
     } catch (err) {
         console.error('Error adding new server', err);

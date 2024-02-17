@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
@@ -6,15 +6,15 @@ import { AuthContext } from "../../context/AuthContext";
 export default function AddServerForm({ onToggleForm }) {
     const { servers } = useContext(UserContext);
     const { userId } = useContext(AuthContext);
+    const [serverName, setServerName] = useState('');
     
     async function handleServerAdd (event) {
         event.preventDefault();
-        const serverName = event.target.elements.serverName.value;
         if (!serverName || !userId) {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:3001/add-server', { serverName, userId });
+            const response = await axios.post('http://localhost:3001/api/servers/add-server', { serverName, userId });
             if (response.status === 200) {
                 servers.push(response.data.server);
                 onToggleForm();
@@ -26,10 +26,14 @@ export default function AddServerForm({ onToggleForm }) {
         }
     }
 
+    function handleServerNameChange(event) {
+        setServerName(event.target.value);
+    }
+
     return (
         <div>
             <form onSubmit={handleServerAdd}>
-                <input type="text" placeholder="Server Name" />
+                <input type="text" placeholder="Server Name" onChange={handleServerNameChange}/>
                 <button type="submit">Add Server</button>
                 <button type="button" onClick={onToggleForm}>Cancel</button>
             </form>
