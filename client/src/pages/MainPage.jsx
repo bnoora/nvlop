@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ServerBar from "../components/ServerBar";
 import FriendComponent from "../components/FriendComponent";
 import ServerComponent from "../components/ServerComponent";
+import SpinningLoading from "../components/SpinningLoading";
 
 // Forms 
 import AddServerForm from "../components/partials/AddServerForm";
@@ -16,8 +17,10 @@ import AddChannelForm from "../components/partials/AddChannelForm";
 
 export default function MainPage() {
     const { user } = useContext(AuthContext);
-    const { servers } = useContext(UserContext);
+    const { servers, friends } = useContext(UserContext);
     const navigate = useNavigate();
+    const [serverlist , setServerList] = useState([]);
+    const [friendList, setFriendList] = useState([]);
 
     // STATES 
     const [showFriendComponent, setShowFriendComponent] = useState(true);
@@ -34,6 +37,22 @@ export default function MainPage() {
         }
     }
     , [user, navigate]);
+
+    useEffect(() => {
+        if (!servers) {
+            return;
+        }
+
+        setServerList(servers);
+    }, [servers]);
+
+    useEffect(() => {
+        if (!friends) {
+            return;
+        }
+
+        setFriendList(friends);
+    }, [friends]);
 
 
     // HANDLERS FOR VIEWS
@@ -61,10 +80,26 @@ export default function MainPage() {
         setShowAddFriendForm(!showAddFriendForm);
     };
 
+    useEffect(() => {
+        console.log(servers);
+    }, []);
+
+    if (!user || !serverlist) {
+        console.log('----------------------------');
+        console.log('No user or servers');
+        console.log(user);
+        console.log(servers);
+        return (
+            <div>
+                1. Loading...
+            </div>
+        )
+    }
+
     return (
         <div>
             <ServerBar onServerClick={handleToggleServerComponent} onFriendClick={handleToggleFriendComponent}
-            servers={servers} onAddServer={handleToggleAddServerForm}/>
+            servers={serverlist} onAddServer={handleToggleAddServerForm}/>
             {showServerComponent && <ServerComponent server={server} onToggleForm={handleToggleAddServerForm}/>}
             {showFriendComponent && <FriendComponent onToggleForm={handleToggleAddFriendForm}/>}
             {showAddServerForm && <AddServerForm user={user} onToggleForm={handleToggleAddServerForm}/>}
