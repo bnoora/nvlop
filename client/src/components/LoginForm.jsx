@@ -1,11 +1,13 @@
 import { AuthContext } from "../context/AuthContext";
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm({ onRegisterClick }) {
     const { login } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         setError(null); 
@@ -16,6 +18,7 @@ export default function LoginForm({ onRegisterClick }) {
         if (username && password) {
             try {
                 await login(username, password);
+                navigate('/main');
             } catch (error) {
                 setError(error.message);
             }
