@@ -33,7 +33,8 @@ app.use(helmet());
 app.use(cors(
     {
         origin: process.env.CLIENT_URL,
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        credentials: true
     }
 ));
 app.use(rateLimit({
