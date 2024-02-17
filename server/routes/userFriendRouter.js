@@ -6,7 +6,8 @@ const {getFriends, createFriend, deleteFriend, createFriendRequest,
 // Get all friends of a user
 router.get('/get-friends', async (req, res) => {
     try {
-        const friends = await getFriends(req.body);
+        const user_id = req.query.user_id;
+        const friends = await getFriends(user_id);
         res.status(200).json(friends);
     } catch (err) {
         res.status(500).json({error: err});

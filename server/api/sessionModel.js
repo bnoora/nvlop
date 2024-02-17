@@ -4,7 +4,7 @@ const pool = require('./dbConfig');
 // Create a session token in the database for a user
 async function createSessionToken(user_id, sessionToken) {
     const client = await pool.connect();
-    const query = 'INSERT INTO session (user_id, sessionToken)  VALUES ($1) RETURNING *';
+    const query = 'INSERT INTO session (user_id, sessionToken) VALUES ($1, $2) RETURNING *';
     const values = [user_id, sessionToken];
     try {
         const res = await client.query(query, values);

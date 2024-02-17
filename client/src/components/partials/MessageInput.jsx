@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 export default function MessageInput({ onSendMessage }) {
     const [message, setMessage] = useState("");
 

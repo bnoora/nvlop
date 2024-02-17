@@ -6,7 +6,8 @@ const {getServersByUser, addUserToServer, removeUserFromServer, addUserModerator
 // Get all servers a user is a member of
 router.get('/get-user-servers', async (req, res) => {
     try {
-        const servers = await getServersByUser(req.body);
+        const user_id = req.query.user_id;
+        const servers = await getServersByUser(user_id);
         res.status(200).json(servers);
     } catch (err) {
         res.status(500).json({error: err});
