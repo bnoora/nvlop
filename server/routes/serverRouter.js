@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const {getServersByUser, addUserToServer, removeUserFromServer, addUserModerator, 
-    removeUserModerator, changeChannelOwner, getModStatus} = require('../api/serverModel');
+    removeUserModerator, changeChannelOwner, getModStatus,
+    addNewServer} = require('../api/serverModel');
 
 // Get all servers a user is a member of
 router.get('/get-user-servers', async (req, res) => {
@@ -69,6 +70,16 @@ router.get('/get-mod-status', async (req, res) => {
     try {
         const isMod = await getModStatus(req.body);
         res.status(200).json(isMod);
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+});
+
+router.post('/add-server', async (req, res) => {
+    try {
+        const user_id = parseInt(req.body.user_id);
+        const server = await addNewServer(req.body.server_name, user_id);
+        res.status(200).json(server);
     } catch (err) {
         res.status(500).json({error: err});
     }

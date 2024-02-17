@@ -120,5 +120,21 @@ async function getModStatus(data) {
     }
 }
 
+async function addNewServer(data) {
+    const client = await pool.connect();
+    const {server_name, user_id} = data;
+    const query = 'INSERT INTO servers (server_name, owner_id) VALUES ($1, $2) RETURNING *';
+    const values = [server_name, user_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error adding new server', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
 module.exports = {getServersByUser, addUserToServer, removeUserFromServer, addUserModerator, 
-    removeUserModerator, changeChannelOwner, getModStatus};
+    removeUserModerator, changeChannelOwner, getModStatus, addNewServer};
