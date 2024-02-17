@@ -18,14 +18,10 @@ function App() {
 		<Router>
 			<Routes>
 				<Route path="/" element={<Navigate replace to={isLoggedIn ? "/main" : "/login"} />} />
-				{isLoggedIn ? (
-					<UserProvider>
-						<Route path="/main" element={<MainPage />} />
-					</UserProvider>
+				{isLoggedIn ? ( 
+					<Route path="/main" element={<MainPage />} />
 				) : (
-					<>
-						<Route path="/login" element={<LoginPage />} />
-					</>
+					<Route path="/login" element={<LoginPage />} />
 				)}
 			</Routes>
 		</Router>
