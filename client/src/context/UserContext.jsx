@@ -34,10 +34,10 @@ export const UserProvider = ({ children }) => {
     // }, [isLoading, user, userId]);
 
     useEffect(() => {
-        if (isLoading || !user || userId) return;
-
+        if (isLoading || !user || !userId) return;
         async function getSessionToken() {
             try {
+                console.log('getting session token');
                 const response = await axios.post('http://localhost:3001/api/auth/socket-auth', 
                 { params: { user_id: userId }}, 
                 { withCredentials: true
@@ -57,8 +57,9 @@ export const UserProvider = ({ children }) => {
 
     // Connect to the socket server
     useEffect(() => {
-        if (isLoading || !user || userId) return;
+        // if (isLoading || !user || userId) return;
         if (!sessionToken) return;
+        console.log('connecting to socket server');
 
         const socket = io('http://localhost:3001', {
             auth: {
@@ -78,7 +79,6 @@ export const UserProvider = ({ children }) => {
         if (isLoading || !user || !userId) return;
         async function getServers() {
             try {
-                console.log('getting servers');
                 const response = await axios.get('http://localhost:3001/api/servers/get-user-servers', {
                     params: { user_id: userId }
                 });

@@ -80,15 +80,11 @@ export default function MainPage() {
         setShowAddFriendForm(!showAddFriendForm);
     };
 
-    useEffect(() => {
-        console.log(servers);
-    }, []);
+    // useEffect(() => {
+    //     console.log(servers);
+    // }, []);
 
     if (!user || !serverlist) {
-        console.log('----------------------------');
-        console.log('No user or servers');
-        console.log(user);
-        console.log(servers);
         return (
             <div>
                 1. Loading...
