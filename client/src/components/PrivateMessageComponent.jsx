@@ -27,7 +27,7 @@ export default function PrivateMessageComponent ({friend}) {
                     <MessageRow key={msg.id} message={msg} />
                 ))}
             </div>
-            <MessageInput onSendMessage={handleSendMessage}/>
+            {friend ? <MessageInput/> : null}
         </div>
     );
 }
