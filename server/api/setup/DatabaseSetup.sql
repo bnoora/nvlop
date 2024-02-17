@@ -7,7 +7,7 @@ CREATE TABLE users (
     bio VARCHAR(100),
     github_url VARCHAR(100),
     twitter_url VARCHAR(100),
-    website_url VARCHAR(100),
+    website_url VARCHAR(100)
 );
 
 CREATE TABLE user_token (
@@ -36,8 +36,8 @@ CREATE TABLE servers (
 CREATE TABLE server_invites (
     invite_id SERIAL PRIMARY KEY,
     server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
-    invite_code SERIAL UNIQUE NOT NULL DEFAULT 10000000,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    invite_code SERIAL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month'
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE server_membership (
     server_id INT REFERENCES channels(channel_id) ON DELETE CASCADE,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_mod BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (user_id, channel_id)
+    PRIMARY KEY (user_id, server_id)
 );
 
 CREATE TABLE messages (
@@ -90,4 +90,12 @@ CREATE TABLE private_messages (
     channel_id INT REFERENCES private_channels(channel_id),
     message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE session (
+    session_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
+    sessiontoken VARCHAR(300) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month' NOT NULL
 );
