@@ -7,7 +7,12 @@ const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-
+const socketCorsOptions = {
+    origin: "http://localhost:5173", // The client URL you want to allow
+    methods: ["GET", "POST"], // HTTP methods allowed
+    credentials: true, // Allow sending of credentials like cookies
+    allowedHeaders: ["my-custom-header"], // Custom headers you might use
+  };
 // Importing modules
 const socketHandler = require('./sockets/scoketHandler')
 
@@ -24,7 +29,9 @@ const userFriendRouter = require('./routes/userFriendRouter');
 // Initializing express app and socket server
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: socketCorsOptions
+  });
 const port = process.env.PORT || 3000;
 
 // Middleware
