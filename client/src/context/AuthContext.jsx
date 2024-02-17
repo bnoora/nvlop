@@ -9,9 +9,12 @@ export const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
+        if (user) return;
         async function checkLoginStatus() {
             try {
-                const response = await axios.post('http://localhost:3001/api/auth/check-login');
+                const response = await axios.post('http://localhost:3001/api/auth/check-login', {}, {
+                    withCredentials: true
+                });         
                 if (response.status === 200 && response.data.isLoggedIn) {
                     setIsLoggedIn(true);
                     setUser(response.data.user);
@@ -30,7 +33,8 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:3001/api/auth/login', { username, password });
+            const response = await axios.post('http://localhost:3001/api/auth/login', 
+            { username, password }, { withCredentials: true });            
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
