@@ -1,14 +1,13 @@
 const {getChannelById } = require('../api/channelModel');
 const {getPrivateChannelById} = require('../api/privateChatModel');
+const {getUserSessionById} = require('../api/sessionModel');
 
 async function checkAuth(token) {
-    const validity = await checkTokenValid(token);
-    if (validity === true) {
-        const user = await getUserByToken(token);
-        return user || false;
-    } else {
-        return false;
+    const res = await getUserSessionById();
+    if (res.sessionToken === token) {
+        return true;
     }
+    return false;
 }
 
 function roomFinder(roomId, roomType) {
@@ -21,4 +20,14 @@ function roomFinder(roomId, roomType) {
     return room || false;
 }
 
-module.exports = {checkAuth, roomFinder};
+function checkAllowedToDelete(msgId, roomId, userID) {
+    // TODO: Implement this function
+    return true;
+}
+
+function checkAllowedToJoinRoom(roomId, roomType, userId) {
+    // TODO: Implement this function
+    return true;
+}
+
+module.exports = {checkAuth, roomFinder, checkAllowedToDelete, checkAllowedToJoinRoom};
