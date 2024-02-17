@@ -4,7 +4,7 @@ const pool = require('./dbConfig');
 async function createUser(user_obj) {
     const client = await pool.connect();
     const { username, password, email } = user_obj;
-    const query = 'INSERT INTO users (username, password, email) VALUES ($1, $2, $3) *';
+    const query = 'INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *';
     const values = [username, password, email];
     try {
         const res = await client.query(query, values);
