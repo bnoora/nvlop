@@ -70,7 +70,6 @@ router.post('/register', async (req, res) => {
 router.post('/check-login', async (req, res) => {
     let token = null;
     let userId = null;
-    console.log(req.cookies);
     if (req.cookies.token) {
         token = req.cookies.token;
     } else {
@@ -79,8 +78,6 @@ router.post('/check-login', async (req, res) => {
     if (!token) {
         return res.status(200).json({ isLoggedIn: false });
     }
-    console.log('Check login token');
-    console.log(token);
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
             // Token is invalid or expired
