@@ -6,6 +6,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
 
 
     useEffect(() => {
@@ -18,6 +20,8 @@ export const AuthProvider = ({ children }) => {
                 if (response.status === 200 && response.data.isLoggedIn) {
                     setIsLoggedIn(true);
                     setUser(response.data.user);
+                    setUserId(response.data.user.user_id);
+                    setIsLoading(false);
                 } else {
                     setIsLoggedIn(false);
                     setUser(null);
@@ -38,6 +42,7 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
+                setIsLoading(false);
             } else {
                 // Handle non 200 res
                 throw new Error('Login failed');
@@ -52,6 +57,7 @@ export const AuthProvider = ({ children }) => {
             await axios.post('http://localhost:3001/api/auth/logout');
             setIsLoggedIn(false);
             setUser(null);
+            setUserId(null);
         } catch (error) {
             console.error('Logout failed', error);
         }
@@ -63,6 +69,8 @@ export const AuthProvider = ({ children }) => {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 setUser(response.data.user);
+                setUserId(response.data.user.user_id);
+                setIsLoading(false);
             } else {
                 throw new Error('Registration failed');
             }
@@ -72,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout, user, register }}>
+        <AuthContext.Provider value={{ isLoggedIn, login, logout, user, register, isLoading, userId }}>
             {children}
         </AuthContext.Provider>
     );
