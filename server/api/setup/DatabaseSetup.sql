@@ -95,7 +95,7 @@ CREATE TABLE private_messages (
 CREATE TABLE session (
     session_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id),
-    token VARCHAR(100) NOT NULL,
+    sessiontoken VARCHAR(300) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 month' NOT NULL
 );
