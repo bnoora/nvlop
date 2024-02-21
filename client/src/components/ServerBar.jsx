@@ -16,8 +16,8 @@ export default function ServerBar(props) {
                     <div>No servers</div>
                 ) : (
                     servers.map((server) => (
-                    <div key={server.id}>
-                        <ServerIcon server={server} onClick={() => onServerClick(server)} />
+                    <div key={server.server_id}>
+                        <ServerIcon server={server} onClick={onServerClick}/>
                     </div>
                     ))
                 )
