@@ -11,7 +11,7 @@ export default function ServerComponent(props) {
 
     async function getChannels() {
         try {
-            const response = await axios.get('http://localhost:3001/get-channels', { serverId: server.id });
+            const response = await axios.get('http://localhost:3001/api/channels/get-channels', { serverId: server.id });
             if (response.status === 200) {
                 setChannels(response.data.channels);
             } else {
