@@ -1,4 +1,5 @@
 const pool = require('./dbConfig');
+const { createChannel } = require('./channelModel');
 
 // Get servers that a user is a member of
 async function getServersByUser(user_id) {
@@ -127,6 +128,7 @@ async function addNewServer(serverName, user_id) {
         const res = await client.query(query, values);
         const server_id = parseInt(res.rows[0].server_id);
         await addUserToServer(server_id, user_id);
+        await createChannel({channel_name: 'general', description: 'General chat', server_id});
         return res.rows[0];
     } catch (err) {
         console.error('Error adding new server', err);
