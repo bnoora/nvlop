@@ -32,7 +32,7 @@ router.get('/get-channel', async (req, res) => {
     }
 });
 
-router.get('get-channels', async (req, res) => {
+router.get('/get-channels', async (req, res) => {
     try {
         const server_id = parseInt(req.query.serverId);
         const channels = await getChannelsByServer(server_id);
