@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {createChannel, deleteChannel, getChannelById} = require('../api/channelModel');
+const {createChannel, deleteChannel, getChannelById, getChannelsByServer} = require('../api/channelModel');
 
 // Create a channel
 router.post('/create-channel', async (req, res) => {
@@ -27,6 +27,16 @@ router.get('/get-channel', async (req, res) => {
     try {
         const channel = await getChannelById(req.body.channel_id);
         res.status(200).json(channel);
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+});
+
+router.get('get-channels', async (req, res) => {
+    try {
+        const server_id = parseInt(req.query.serverId);
+        const channels = await getChannelsByServer(server_id);
+        res.status(200).json(channels);
     } catch (err) {
         res.status(500).json({error: err});
     }

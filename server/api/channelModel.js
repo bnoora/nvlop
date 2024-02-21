@@ -49,4 +49,20 @@ async function getChannelById(channel_id) {
     }
 }
 
-module.exports = {createChannel, deleteChannel, getChannelById};
+// Get all channels from the database by server_id
+async function getChannelsByServer(server_id) {
+    const client = await pool.connect();
+    const query = 'SELECT * FROM channels WHERE server_id = $1';
+    const values = [server_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows;
+    } catch (err) {
+        console.error('Error getting channels by server', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = {createChannel, deleteChannel, getChannelById, getChannelsByServer};
