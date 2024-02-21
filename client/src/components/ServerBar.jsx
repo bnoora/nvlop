@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useState } from "react";
 import ServerIcon from "./partials/ServerIcon";
 
 export default function ServerBar(props) {
