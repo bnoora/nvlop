@@ -4,34 +4,14 @@ import { AuthContext } from './AuthContext';
 import io from 'socket.io-client';
 
 export const UserContext = createContext();
+export const SocketContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const { user, isLoading, userId } = useContext(AuthContext);
     const [servers, setServers] = useState([]);
     const [friends, setFriends] = useState([]);
     const [sessionToken, setSessionToken] = useState(''); // This is the session token for the user
-
-    // useEffect(() => {
-    //     function doesCookieExist(cookieName) {
-    //         const cookies = document.cookie.split(';');
-    //         return cookies.some(cookie => cookie.trim().startsWith(`${cookieName}=`));
-    //     }
-        
-    //     // Usage
-    //     if (doesCookieExist('token')) {
-    //         console.log('Cookie exists');
-    //     } else {
-    //         console.log('Cookie does not exist');
-    //     }        
-    // }, [user]);
-
-    // get the session token for the user
-
-    // useEffect(() => {
-    //     console.log(isLoading);
-    //     console.log(user);
-    //     console.log(userId);
-    // }, [isLoading, user, userId]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         if (isLoading || !user || !userId) return;
@@ -61,17 +41,17 @@ export const UserProvider = ({ children }) => {
         if (!sessionToken) return;
         console.log('connecting to socket server');
 
-        const socket = io('http://localhost:3001', {
+        const newSocket = io('http://localhost:3001', {
             auth: {
                 token: sessionToken,
             },
         });
 
-        socket.on('connect', () => console.log('Connected to socket server'));
+        setSocket(newSocket);
+        newSocket.on('connect', () => console.log('Connected to socket server'));
+        newSocket.on('disconnect', () => console.log('Disconnected from socket server'));
 
-        socket.on('disconnect', () => console.log('Disconnected from socket server'));
-
-        return () => socket.disconnect(); // Disconnect the socket when the component unmounts
+        return () => newSocket.disconnect(); // Disconnect the socket when the component unmounts
     }, [sessionToken]);
 
     // Get all servers for the user
@@ -83,7 +63,7 @@ export const UserProvider = ({ children }) => {
                     params: { user_id: userId }
                 });
                 if (response.status === 200) {
-                    setServers(response.data.servers);
+                    setServers(response.data);
                 } else {
                     throw new Error('Unable to get servers');
                 }
@@ -116,7 +96,9 @@ export const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider value={{ servers, friends }}>
-            {children}
+            <SocketContext.Provider value={socket}>
+                {children}
+            </SocketContext.Provider>
         </UserContext.Provider>
     );
 
