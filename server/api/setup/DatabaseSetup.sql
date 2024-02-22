@@ -27,7 +27,7 @@ CREATE TABLE user_settings (
 CREATE TABLE servers (
     server_id SERIAL PRIMARY KEY,
     owner_id INT REFERENCES users(user_id),
-    server_name VARCHAR(100) UNIQUE NOT NULL,
+    server_name VARCHAR(100) NOT NULL,
     description TEXT,
     icon_url VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -43,7 +43,7 @@ CREATE TABLE server_invites (
 
 CREATE TABLE channels (
     channel_id SERIAL PRIMARY KEY,
-    channel_name VARCHAR(100) UNIQUE NOT NULL,
+    channel_name VARCHAR(100) NOT NULL,
     description TEXT,
     server_id INT REFERENCES servers(server_id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
