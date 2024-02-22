@@ -3,12 +3,14 @@ import axios from 'axios';
 
 import ServerChannels from "./ServerChannels";
 import MessageComponent from "./MessageComponent";
+import AddChannelForm from "./partials/AddChannelForm";
 
 export default function ServerComponent(props) {
-    const { server, onToggleForm } = props;
+    const { server } = props;
     const [channels, setChannels] = useState([]);
     const firstChannel = channels[0];
     const [selectedChannel, setSelectedChannel] = useState(firstChannel);
+    const [showAddChannelForm, setShowAddChannelForm] = useState(false);
 
     async function getChannels() {
         try {
@@ -41,15 +43,26 @@ export default function ServerComponent(props) {
     const handleChannelClick = (channel) => {
         setSelectedChannel(channel);
     };
+
+    const addNewChannel = (channel) => {
+        setChannels([...channels, channel]);
+    };
+
+    const handleToggleAddChannelForm = () => {
+        setShowAddChannelForm(!showAddChannelForm);
+    };
     
     return (
         <div>
             <div>
                 <h1>{server.name}</h1>
                 <ServerChannels channels={channels} onChannelClick={handleChannelClick} 
-                                onToggleForm={onToggleForm} />
+                                onToggleForm={handleToggleAddChannelForm} addNewChannel={addNewChannel} />
             </div>
             <MessageComponent server={server} channels={selectedChannel} privateMsg={false} />
+            {showAddChannelForm && <AddChannelForm server={server} 
+                                    onToggleForm={handleToggleAddChannelForm} 
+                                    onAddChannel={addNewChannel} />}
         </div>
     );
 }
