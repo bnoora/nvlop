@@ -5,7 +5,7 @@ const {createMessage, getMessagesByChannel, deleteMessage} = require('../api/mes
 router.post('/create-message', async (req, res) => {
     try {
         const message = await createMessage(req.body);
-        res.status(200).json(message);
+        res.status(200).json({message: message});
     } catch (err) {
         res.status(500).json({error: err});
     }
@@ -13,8 +13,9 @@ router.post('/create-message', async (req, res) => {
 
 router.get('/get-messages', async (req, res) => {
     try {
-        const messages = await getMessagesByChannel(req.body);
-        res.status(200).json(messages);
+        const channel_id = parseInt(req.query.channel);
+        const messages = await getMessagesByChannel(channel_id);
+        res.status(200).json({messages: messages});
     } catch (err) {
         res.status(500).json({error: err});
     }

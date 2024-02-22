@@ -38,6 +38,7 @@ export default function ServerComponent(props) {
         if (channels === undefined || channels.length === 0) {
             return;
         }
+        setSelectedChannel(channels[0]);
     }, [channels]);
 
     const handleChannelClick = (channel) => {
@@ -59,7 +60,7 @@ export default function ServerComponent(props) {
                 <ServerChannels channels={channels} onChannelClick={handleChannelClick} 
                                 onToggleForm={handleToggleAddChannelForm} addNewChannel={addNewChannel} />
             </div>
-            <MessageComponent server={server} channels={selectedChannel} privateMsg={false} />
+            <MessageComponent server={server} channel={selectedChannel}/>
             {showAddChannelForm && <AddChannelForm server={server} 
                                     onToggleForm={handleToggleAddChannelForm} 
                                     onAddChannel={addNewChannel} />}
