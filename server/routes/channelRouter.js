@@ -5,7 +5,6 @@ const {createChannel, deleteChannel, getChannelById, getChannelsByServer} = requ
 // Create a channel
 router.post('/create-channel', async (req, res) => {
     try {
-        console.log(req.body);
         const channel = await createChannel(req.body);
         res.status(200).json(channel);
     } catch (err) {
@@ -37,7 +36,6 @@ router.get('/get-channels', async (req, res) => {
     try {
         const server_id = parseInt(req.query.serverId);
         const channels = await getChannelsByServer(server_id);
-        console.log(channels);
         res.status(200).json({channels: channels});
     } catch (err) {
         res.status(500).json({error: err});
