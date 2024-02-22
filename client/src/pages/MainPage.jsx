@@ -28,7 +28,7 @@ export default function MainPage() {
     const [showAddServerForm, setShowAddServerForm] = useState(false);
     const [showAddFriendForm, setShowAddFriendForm] = useState(false);
     const [showAddChannelForm, setShowAddChannelForm] = useState(false);
-    const [server, setServer] = useState();
+    const [server, setServer] = useState(null);
 
 
     useEffect(() => {
@@ -45,6 +45,14 @@ export default function MainPage() {
 
         setServerList(servers);
     }, [servers]);
+
+
+    useEffect(() => {
+        if (serverlist.length === 0) {
+            return;
+        }
+        setServer(serverlist[0]);
+    }, [serverlist]); 
 
     useEffect(() => {
         if (!friends) {
@@ -64,7 +72,6 @@ export default function MainPage() {
     const handleToggleServerComponent = (selectedServer) => {
         setShowFriendComponent(false);
         setShowServerComponent(true);
-        setServer(selectedServer);
     };
 
     // HANDLERS FOR FORMS
@@ -79,10 +86,6 @@ export default function MainPage() {
     const handleToggleAddFriendForm = () => {
         setShowAddFriendForm(!showAddFriendForm);
     };
-
-    // useEffect(() => {
-    //     console.log(servers);
-    // }, []);
 
     if (!user || !serverlist) {
         return (

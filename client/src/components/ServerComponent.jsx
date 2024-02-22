@@ -7,11 +7,14 @@ import MessageComponent from "./MessageComponent";
 export default function ServerComponent(props) {
     const { server, onToggleForm } = props;
     const [channels, setChannels] = useState([]);
-    const [selectedChannel, setSelectedChannel] = useState(null);
+    const firstChannel = channels[0];
+    const [selectedChannel, setSelectedChannel] = useState(firstChannel);
 
     async function getChannels() {
         try {
-            const response = await axios.get('http://localhost:3001/api/channels/get-channels', { serverId: server.id });
+            const response = await axios.get('http://localhost:3001/api/channels/get-channels', { 
+                params: { serverId: server.server_id }
+            });
             if (response.status === 200) {
                 setChannels(response.data.channels);
             } else {
@@ -23,9 +26,17 @@ export default function ServerComponent(props) {
     }
 
     useEffect(() => {
+        if (!server) {
+            return;
+        }
         getChannels();
-        setSelectedChannel(channels[0]);
-    }, []);
+    }, [server]);
+
+    useEffect(() => {
+        if (channels === undefined || channels.length === 0) {
+            return;
+        }
+    }, [channels]);
 
     const handleChannelClick = (channel) => {
         setSelectedChannel(channel);
@@ -38,7 +49,7 @@ export default function ServerComponent(props) {
                 <ServerChannels channels={channels} onChannelClick={handleChannelClick} 
                                 onToggleForm={onToggleForm} />
             </div>
-            <MessageComponent server={server} channel={selectedChannel} privateMsg={false} />
+            <MessageComponent server={server} channels={selectedChannel} privateMsg={false} />
         </div>
     );
 }

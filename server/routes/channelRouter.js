@@ -36,7 +36,8 @@ router.get('/get-channels', async (req, res) => {
     try {
         const server_id = parseInt(req.query.serverId);
         const channels = await getChannelsByServer(server_id);
-        res.status(200).json(channels);
+        console.log(channels);
+        res.status(200).json({channels: channels});
     } catch (err) {
         res.status(500).json({error: err});
     }
