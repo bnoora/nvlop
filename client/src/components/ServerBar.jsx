@@ -9,7 +9,7 @@ export default function ServerBar(props) {
     }
 
     return (
-        <div>
+        <div id="serverbar">
             <button onClick={onFriendClick}>Friends</button>
             {
                 servers.length === 0 ? (
@@ -17,7 +17,7 @@ export default function ServerBar(props) {
                 ) : (
                     servers.map((server) => (
                     <div key={server.server_id}>
-                        <ServerIcon server={server} onClick={onServerClick}/>
+                        <ServerIcon server={server} onClick={() => onServerClick(server)}/>
                     </div>
                     ))
                 )
