@@ -70,6 +70,7 @@ export default function MainPage() {
     const handleToggleServerComponent = (selectedServer) => {
         setShowFriendComponent(false);
         setShowServerComponent(true);
+        setServer(selectedServer);
     };
 
     // HANDLERS FOR FORMS
