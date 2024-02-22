@@ -5,6 +5,7 @@ const {createChannel, deleteChannel, getChannelById, getChannelsByServer} = requ
 // Create a channel
 router.post('/create-channel', async (req, res) => {
     try {
+        console.log(req.body);
         const channel = await createChannel(req.body);
         res.status(200).json(channel);
     } catch (err) {

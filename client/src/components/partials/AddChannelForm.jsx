@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function AddChannelForm({ server, onToggleForm }) {
+export default function AddChannelForm({ server, onToggleForm, onAddChannel }) {
     const serverId = server.server_id;
     const [ channelName, setChannelName ] = useState('');
     const [ channelDescription, setChannelDescription ] = useState('');
@@ -18,7 +18,7 @@ export default function AddChannelForm({ server, onToggleForm }) {
                                                                                         channel_name: channelName,  
                                                                                         description: channelDescription});
             if (response.status === 200) {
-                channels.push(response.data.channel);
+                onAddChannel(response.data);
                 onToggleForm();
             } else {
                 throw new Error('Unable to add channel');

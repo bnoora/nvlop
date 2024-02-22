@@ -13,7 +13,7 @@ export default function ServerChannels(props) {
             <button onClick={onToggleForm}>Add Channel+</button>
             {
                 channels.map((channel) => (
-                    <ChannelRows key={channel.channel_id} channel={channel} onClick={onChannelClick} />
+                    <ChannelRows key={channel.channel_id} channel={channel} onChannelClick={onChannelClick} />
                 ))
             }
         </div>
