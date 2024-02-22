@@ -3,6 +3,10 @@ export default function ServerIcon({ server, onClick }) {
         return str.charAt(0);
     }
     
+    if (!server) {
+        return null;
+    }
+    
     return (
         <div onClick={onClick}>
             {server.icon_url ? (
