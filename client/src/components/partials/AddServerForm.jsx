@@ -3,7 +3,7 @@ import { UserContext } from "../../context/UserContext";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 
-export default function AddServerForm({ onToggleForm }) {
+export default function AddServerForm({ onToggleForm, handleAddServer }) {
     const { servers } = useContext(UserContext);
     const { userId } = useContext(AuthContext);
     const [serverName, setServerName] = useState('');
@@ -16,7 +16,7 @@ export default function AddServerForm({ onToggleForm }) {
         try {
             const response = await axios.post('http://localhost:3001/api/servers/add-server', { serverName, userId });
             if (response.status === 200) {
-                servers.push(response.data.server);
+                handleAddServer(response.data);
                 onToggleForm();
             } else {
                 throw new Error('Unable to add server');

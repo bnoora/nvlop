@@ -98,7 +98,7 @@ export default function MainPage() {
         <div>
             <ServerBar onServerClick={handleToggleServerComponent} 
                         onFriendClick={handleToggleFriendComponent} servers={serverlist} 
-                        onAddServer={handleAddServer} formToggle={handleToggleAddServerForm}/>
+                        onAddServer={handleAddServer} onToggleForm={handleToggleAddServerForm}/>
             {showServerComponent && <ServerComponent server={server}/>}
             {showFriendComponent && <FriendComponent onToggleForm={handleToggleAddFriendForm}/>}
             {showAddServerForm && <AddServerForm user={user} onToggleForm={handleToggleAddServerForm} 

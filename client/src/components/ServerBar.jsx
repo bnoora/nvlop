@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ServerIcon from "./partials/ServerIcon";
 
 export default function ServerBar(props) {
-    const { onServerClick, onFriendClick, servers, onAddServer } = props;
+    const { onServerClick, onFriendClick, servers, onToggleForm } = props;
     
     if (!servers) {
         return <div>Loading...</div>; // Or any other placeholder you wish to show
@@ -23,7 +23,7 @@ export default function ServerBar(props) {
                 )
             }
 
-            <button onClick={onAddServer}>Add Server+</button>
+            <button onClick={onToggleForm}>Add Server+</button>
         </div>
     );
 }
