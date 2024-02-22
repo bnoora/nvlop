@@ -49,4 +49,20 @@ async function getUserSessionById(user_id) {
     }
 }
 
-module.exports = { createSessionToken, removeSessionToken, getUserSessionById };
+// Delete any session tokens for a user
+async function deleteUserSession(user_id) {
+    const client = await pool.connect();
+    const query = 'DELETE FROM session WHERE user_id = $1';
+    const values = [user_id];
+    try {
+        const res = await client.query(query, values);
+        return res.rows[0];
+    } catch (err) {
+        console.error('Error deleting user session', err);
+        throw err;
+    } finally {
+        client.release();
+    }
+}
+
+module.exports = { createSessionToken, removeSessionToken, getUserSessionById, deleteUserSession };

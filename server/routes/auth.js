@@ -6,7 +6,7 @@ const {createUser, getUserById} = require('../api/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const {createSessionToken, removeSessionToken} = require('../api/sessionModel');
+const {createSessionToken, deleteUserSession} = require('../api/sessionModel');
 
 
 // Login POST request
@@ -113,6 +113,7 @@ router.post('/socket-auth', async (req, res) => {
         }
         const sessionToken = crypto.randomBytes(64).toString('hex');
         const userId = decoded.userId;
+        deleteUserSession(userId);
         createSessionToken(userId, sessionToken);
         return res.status(200).json({ message: "Socket authenticated", sessionToken: sessionToken });
     });
